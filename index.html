@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MH Live Sports - Advanced Premium TV</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Video.js CSS -->
+    <link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background-color: #04060f;
+            color: #f1f5f9;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            transition: transform 0.4s ease;
+        }
+
+        /* ── 🎬 PREMIUM APP OPENING ANIMATION (SPLASH SCREEN) ── */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #04060f;
+            z-index: 999999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        
+        /* স্প্ল্যাশ স্ক্রিনের ভেতরের ডেভেলাপার ইমেজ অ্যানিমেশন */
+        .splash-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ff1f44;
+            box-shadow: 0 0 20px rgba(255, 31, 68, 0.4), 0 0 40px rgba(255, 31, 68, 0.2);
+            opacity: 0;
+            transform: scale(0.6);
+            animation: splashImageFade 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 0.3s;
+        }
+        
+        /* স্প্ল্যাশ স্ক্রিনের টেক্সট অ্যানিমেশন */
+        .splash-title {
+            color: #fff;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-align: center;
+            opacity: 0;
+            text-shadow: 0 0 10px rgba(255, 31, 68, 0.5);
+            animation: splashTextFade 1.5s ease forwards 0.6s;
+        }
+        .splash-title span {
+            color: #ff1f44;
+        }
+        
+        /* লোডিং লাইনের অ্যানিমেশন */
+        .splash-loader-bar {
+            width: 150px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+            margin-top: 10px;
+        }
+        .splash-loader-progress {
+            width: 100%;
+            height: 100%;
+            background: #ff1f44;
+            position: absolute;
+            left: -100%;
+            border-radius: 5px;
+            box-shadow: 0 0 10px #ff1f44;
+            animation: loaderProgress 2.2s cubic-bezier(0.4, 0, 0.2, 1) forwards 0.5s;
+        }
+
+        /* Keyframes for Splash Screen */
+        @keyframes splashImageFade {
+            0% { opacity: 0; transform: scale(0.6); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes splashTextFade {
+            0% { opacity: 0; transform: translateY(10px); letter-spacing: 0px; }
+            100% { opacity: 1; transform: translateY(0); letter-spacing: 2px; }
+        }
+        @keyframes loaderProgress {
+            0% { left: -100%; }
+            100% { left: 0%; }
+        }
+
+        /* ── 🔄 CSS FOR FORCE LANDSCAPE ROTATION ── */
+        body.force-landscape {
+            width: 100vh !important;
+            height: 100vw !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 100vw !important;
+            transform: rotate(90deg) !important;
+            transform-origin: top left !important;
+            overflow: hidden !important;
+        }
+
+        /* ── OTT PREMIUM HEADER ── */
+        .ott-header {
+            background: linear-gradient(180deg, #080c16 0%, rgba(8, 12, 22, 0) 100%);
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        .app-logo {
+            font-size: 26px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-shadow: 0 0 10px rgba(255, 31, 68, 0.3);
+        }
+        .logo-dot {
+            width: 10px;
+            height: 10px;
+            background: #ff1f44;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #ff1f44, 0 0 30px #ff1f44;
+            animation: logoPulse 2s infinite alternate;
+        }
+        @keyframes logoPulse {
+            0% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 10px #ff1f44; }
+            100% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 20px #ff1f44, 0 0 35px #ff1f44; }
+        }
+        .nav-menu {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+        .nav-item a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .nav-item.active a, .nav-item a:hover {
+            color: #ff1f44;
+            text-shadow: 0 0 10px rgba(255, 31, 68, 0.5);
+        }
+        
+        /* ── 👤 PREMIUM USER PROFILE PICTURE ── */
+        .profile-container {
+            display: flex;
+            align-items: center;
+        }
+        .profile-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            object-fit: cover;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .profile-icon:hover {
+            border-color: #ff1f44;
+            box-shadow: 0 0 15px rgba(255, 31, 68, 0.6);
+            transform: scale(1.05);
+        }
+
+        /* ── MAIN CONTENT CONTAINER ── */
+        .main-layout {
+            flex: 1;
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 20px 60px 20px;
+            position: relative;
+        }
+
+        /* Responsive TV Player Wrapper with Premium Neon Glow */
+        .player-section {
+            background: #000;
+            border-radius: 20px;
+            overflow: hidden;
+            aspect-ratio: 16/9;
+            position: relative;
+            border: 1px solid rgba(255, 31, 68, 0.2);
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 
+                        0 0 30px rgba(255, 31, 68, 0.05);
+            animation: neonPulse 4s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @keyframes neonPulse {
+            0% { border-color: rgba(255, 31, 68, 0.2); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 31, 68, 0.05); }
+            100% { border-color: rgba(255, 31, 68, 0.45); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 31, 68, 0.15); }
+        }
+        .video-js {
+            width: 100% !important;
+            height: 100% !important;
+            z-index: 1;
+        }
+
+        /* ── 🕹️ FLOATING OVERLAY PANEL ── */
+        .player-top-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            pointer-events: none;
+        }
+
+        /* ── 📺 VIDEO RUNNING TEXT (MARQUEE) ── */
+        .player-ticker {
+            background: rgba(8, 12, 22, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            flex: 1;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            pointer-events: auto;
+        }
+        .ticker-badge {
+            background: #ff1f44;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 0 12px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+            border-top-left-radius: 9px;
+            border-bottom-left-radius: 9px;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.3);
+        }
+        .ticker-text-container {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+        .player-marquee {
+            display: flex;
+            white-space: nowrap;
+            padding-left: 100%;
+            animation: playerMarquee 15s linear infinite;
+        }
+        .marquee-item {
+            font-size: 12px;
+            color: #fff;
+            font-weight: 600;
+            padding-right: 50px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        @keyframes playerMarquee {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        /* ── 🔀 BUTTONS CONTROLLER GROUP ── */
+        .server-and-actions {
+            display: flex;
+            gap: 10px;
+            pointer-events: auto;
+        }
+
+        /* Server Switching Layout */
+        .server-controller {
+            display: flex;
+            background: rgba(8, 12, 22, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 3px;
+            border-radius: 10px;
+            gap: 4px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+        .server-btn {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 0 14px;
+            height: 32px;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .server-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .server-btn.active-server {
+            background: #ff1f44;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255, 31, 68, 0.4);
+        }
+
+        /* Utility Actions Button Style */
+        .player-overlay-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .tv-action-btn {
+            background: rgba(8, 12, 22, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #fff;
+            padding: 0 16px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            height: 38px;
+        }
+        .tv-action-btn.cinema-trigger {
+            border-color: rgba(255, 31, 68, 0.4);
+            background: rgba(255, 31, 68, 0.15);
+        }
+        .tv-action-btn:hover {
+            background: linear-gradient(135deg, #ff1f44 0%, #b91c1c 100%);
+            border-color: transparent;
+            box-shadow: 0 6px 20px rgba(255, 31, 68, 0.5);
+            transform: translateY(-2px);
+        }
+        .tv-action-btn.active-state {
+            background: #ff1f44;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(255, 31, 68, 0.4);
+        }
+
+        /* ── TV CHANNEL METADATA ── */
+        .channel-details {
+            margin-top: 30px;
+            background: rgba(11, 17, 32, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        .channel-info h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .live-badge {
+            background: #ff1f44;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 15px rgba(255, 31, 68, 0.6);
+            animation: liveGlow 1.2s infinite alternate;
+        }
+        @keyframes liveGlow {
+            0% { opacity: 0.8; box-shadow: 0 0 10px rgba(255, 31, 68, 0.4); }
+            100% { opacity: 1; box-shadow: 0 0 20px rgba(255, 31, 68, 0.8); }
+        }
+        .channel-info p {
+            font-size: 13px;
+            color: #94a3b8;
+            line-height: 1.7;
+            max-width: 700px;
+        }
+        .channel-status-tags {
+            display: flex;
+            gap: 12px;
+        }
+        .status-tag {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #cbd5e1;
+        }
+        .status-tag.active-viewers {
+            border-color: rgba(16, 185, 129, 0.3);
+            background: rgba(16, 185, 129, 0.02);
+        }
+        .status-tag.active-viewers::before {
+            content: '';
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            background: #10b981;
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        /* ── LIVE TV TICKER (BOTTOM NEWS BAR) ── */
+        .ticker-wrap {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            height: 38px;
+            background-color: #070a14;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            align-items: center;
+            z-index: 999;
+        }
+        .ticker-title {
+            background: linear-gradient(135deg, #ff1f44 0%, #b91c1c 100%);
+            color: white;
+            padding: 0 20px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 700;
+            z-index: 2;
+            white-space: nowrap;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.4);
+        }
+        .ticker {
+            display: flex;
+            white-space: nowrap;
+            padding-left: 100%;
+            animation: ticker 28s linear infinite;
+        }
+        .ticker-item {
+            display: inline-block;
+            padding: 0 2.5rem;
+            font-size: 13px;
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+        @keyframes ticker {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        /* ── FORCED FULL SCREEN TV MODE ── */
+        body.forced-fullscreen {
+            overflow: hidden !important;
+        }
+        body.forced-fullscreen .ott-header, 
+        body.forced-fullscreen .channel-details,
+        body.forced-fullscreen .ticker-wrap {
+            display: none !important;
+        }
+        body.forced-fullscreen .main-layout {
+            padding: 0 !important;
+            max-width: 100vw !important;
+            width: 100vw !important;
+        }
+        body.forced-fullscreen .player-section {
+            position: fixed !important;
+            inset: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            border-radius: 0 !important;
+            border: none !important;
+            z-index: 99999 !important;
+            animation: none !important;
+        }
+        body.forced-fullscreen .player-top-overlay {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            z-index: 100000;
+        }
+
+        /* Video.js Big Play Button Custom Design */
+        .vjs-big-play-centered .vjs-big-play-button {
+            background: linear-gradient(135deg, #ff1f44 0%, #cc0026 100%) !important;
+            border: none !important;
+            border-radius: 50% !important;
+            width: 70px !important;
+            height: 70px !important;
+            line-height: 70px !important;
+            margin-top: -35px !important;
+            margin-left: -35px !important;
+            box-shadow: 0 0 25px rgba(255, 31, 68, 0.6) !important;
+        }
+
+        /* ── 📱 MOBILE ULTRA-RESPONSIVE RE-FIX ── */
+        @media (max-width: 850px) {
+            .player-top-overlay {
+                flex-direction: column;
+                align-items: flex-end;
+                top: 12px;
+                left: 12px;
+                right: 12px;
+                gap: 10px;
+            }
+            .player-ticker {
+                width: 100%;
+                height: 32px;
+            }
+            .ticker-badge {
+                font-size: 10px;
+                padding: 0 8px;
+            }
+            .marquee-item {
+                font-size: 11px;
+                padding-right: 35px;
+            }
+            .server-and-actions {
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-end;
+                align-items: center;
+                width: 100%;
+                gap: 8px;
+            }
+            .server-controller {
+                height: 36px;
+                padding: 2px;
+            }
+            .server-btn {
+                height: 30px;
+                padding: 0 12px;
+                font-size: 11px;
+            }
+            .player-overlay-actions {
+                display: flex;
+                gap: 8px;
+            }
+            .tv-action-btn {
+                height: 36px;
+                padding: 0 14px;
+                font-size: 11px;
+                border-radius: 10px;
+            }
+            body.force-landscape.forced-fullscreen .player-section {
+                width: 100vh !important;
+                height: 100vw !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ott-header { padding: 15px 20px; }
+            .nav-menu { display: none; }
+            .channel-details { padding: 15px; flex-direction: column; }
+            .app-logo { font-size: 22px; }
+            .tv-action-btn { padding: 0 10px; }
+            .server-btn { padding: 0 8px; }
+            .splash-title { font-size: 16px; }
+            .splash-avatar { width: 100px; height: 100px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 🎬 WELCOME SPLASH SCREEN (৩ সেকেন্ডের ওপেনিং অ্যানিমেশন) -->
+    <div id="splash-screen">
+        <img src="https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/5db0c6a0-5095-42cb-b9db-176c1976c705.jpg" alt="MH Developer" class="splash-avatar">
+        <h1 class="splash-title">Welcome to <span>MH Live Sports</span></h1>
+        <div class="splash-loader-bar">
+            <div class="splash-loader-progress"></div>
+        </div>
+    </div>
+
+    <!-- OTT Premium Header -->
+    <header class="ott-header">
+        <div class="header-left">
+            <div class="app-logo">MH Stream <span class="logo-dot"></span></div>
+            <ul class="nav-menu">
+                <li class="nav-item active"><a href="#">Live TV</a></li>
+                <li class="nav-item"><a href="#">Sports</a></li>
+                <li class="nav-item"><a href="#">Movies</a></li>
+                <li class="nav-item"><a href="#">Premium</a></li>
+            </ul>
+        </div>
+        <div class="header-right">
+            <div class="profile-container">
+                <img src="https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/5db0c6a0-5095-42cb-b9db-176c1976c705.jpg" alt="Developer Profile" class="profile-icon">
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Layout -->
+    <main class="main-layout">
+        
+        <!-- Premium TV Player Container -->
+        <section class="player-section">
+            <video 
+                id="mh-vjs-player" 
+                class="video-js vjs-big-play-centered vjs-default-skin" 
+                controls 
+                preload="auto"
+                autoplay
+                muted
+                playsinline
+                webkit-playsinline>
+            </video>
+
+            <!-- 🕹️ FLOATING OVERLAY PANEL -->
+            <div class="player-top-overlay">
+                
+                <!-- 📺 VIDEO RUNNING TEXT -->
+                <div class="player-ticker">
+                    <div class="ticker-badge">NOTICE</div>
+                    <div class="ticker-text-container">
+                        <div class="player-marquee">
+                            <span class="marquee-item">🎉 Welcome to MH Live Sports! Enjoy uninterrupted Ultra HD streaming experience.</span>
+                            <span class="marquee-item">⚡ If buffering issues occur, please switch servers or check your connection.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 🎛️ CONTROLS CONTAINER -->
+                <div class="server-and-actions">
+                    <!-- Multi-Server Controller -->
+                    <div class="server-controller">
+                        <button class="server-btn active-server" id="srv1" onclick="switchServer(1)">Server 1</button>
+                        <button class="server-btn" id="srv2" onclick="switchServer(2)">Server 2</button>
+                    </div>
+
+                    <!-- Action Buttons Group -->
+                    <div class="player-overlay-actions">
+                        <button class="tv-action-btn" id="rotateBtn" onclick="toggleScreenRotation()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                            </svg>
+                            <span id="rotateBtnText">Rotate</span>
+                        </button>
+
+                        <button class="tv-action-btn cinema-trigger" id="customFSBtn" onclick="toggleForcedFullscreen()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                            </svg>
+                            <span id="fsBtnText">Cinema</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- TV Station Metadata Panel -->
+        <section class="channel-details">
+            <div class="channel-info">
+                <h2>T Sports Live <span class="live-badge">LIVE</span></h2>
+                <p>Enjoy continuous seamless streaming of premium sports events, cricket leagues, football highlights, and live talk shows directly from the official broadcaster network feed.</p>
+            </div>
+            <div class="channel-status-tags">
+                <div class="status-tag active-viewers">14.8K Watching</div>
+                <div class="status-tag">1080p Ultra HD</div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Live TV Ticker News Bar (Bottom) -->
+    <div class="ticker-wrap">
+        <div class="ticker-title">MH BROADCAST</div>
+        <div class="ticker">
+            <div class="ticker-item">⚡ Welcome to the all-new premium TV application update!</div>
+            <div class="ticker-item">⚽ High definition uninterrupted buffering-free live stream is now broadcasted.</div>
+            <div class="ticker-item">🎬 Use the floating 'Rotate' and 'Cinema' buttons right on top of the player for a quick theater layout switch!</div>
+        </div>
+    </div>
+
+    <!-- Video.js JavaScript CDN -->
+    <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
+
+    <script>
+        const servers = {
+            1: 'https://1nyaler.streamhostingcdn.top/stream/32/index.m3u8',
+            2: 'https://1nyaler.streamhostingcdn.top/stream/23/index.m3u8'
+        };
+        
+        let currentPlayerServer = 1;
+        let player;
+
+        // ⏱️ ৩ সেকেন্ড পর স্প্ল্যাশ স্ক্রিন হাইড করার জাভাস্ক্রিপ্ট কন্ট্রোল
+        window.addEventListener("load", () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                splash.style.opacity = '0';
+                splash.style.visibility = 'hidden';
+            }, 3000); // ৩০০০ মিলিভোল্ট = ৩ সেকেন্ড
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            player = videojs('mh-vjs-player', {
+                responsive: true,
+                fluid: false, 
+                html5: {
+                    vhs: { overrideNative: true }
+                },
+                controlBar: {
+                    pictureInPictureToggle: false,
+                    volumePanel: { inline: false },
+                    fullscreenToggle: false 
+                }
+            });
+
+            player.ready(() => {
+                loadStream(servers[currentPlayerServer]);
+            });
+        });
+
+        function loadStream(url) {
+            if (!player) return;
+            player.pause();
+            player.src({ src: url, type: 'application/x-mpegURL' });
+            player.load();
+
+            let playPromise = player.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(() => {
+                    player.muted(true);
+                    player.play();
+                });
+            }
+        }
+
+        function switchServer(serverNum) {
+            if (serverNum === currentPlayerServer) return;
+            currentPlayerServer = serverNum;
+            document.getElementById('srv1').classList.toggle('active-server', serverNum === 1);
+            document.getElementById('srv2').classList.toggle('active-server', serverNum === 2);
+            loadStream(servers[serverNum]);
+        }
+
+        function toggleScreenRotation() {
+            const body = document.body;
+            const rotateBtn = document.getElementById('rotateBtn');
+            const rotateText = document.getElementById('rotateBtnText');
+
+            if (!body.classList.contains('force-landscape')) {
+                body.classList.add('force-landscape');
+                rotateBtn.classList.add('active-state');
+                if(rotateText) rotateText.innerText = "Portrait";
+            } else {
+                body.classList.remove('force-landscape');
+                rotateBtn.classList.remove('active-state');
+                if(rotateText) rotateText.innerText = "Rotate";
+            }
+
+            if(player) {
+                setTimeout(() => { player.handleResize(); }, 300);
+            }
+        }
+
+        function toggleForcedFullscreen() {
+            const body = document.body;
+            const btnText = document.getElementById('fsBtnText');
+            const btn = document.getElementById('customFSBtn');
+
+            if (!body.classList.contains('forced-fullscreen')) {
+                body.classList.add('forced-fullscreen');
+                if(btnText) btnText.innerText = "Minimize";
+                btn.querySelector('svg').innerHTML = '<path d="M4 14h6v6M20 10h-6V4M14 10l7-7M10 14l-7 7"/>';
+            } else {
+                body.classList.remove('forced-fullscreen');
+                if(btnText) btnText.innerText = "Cinema";
+                btn.querySelector('svg').innerHTML = '<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>';
+            }
+            
+            if(player) {
+                setTimeout(() => { player.handleResize(); }, 300);
+            }
+        }
+    </script>
+
+</body>
+</html>
