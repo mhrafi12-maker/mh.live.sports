@@ -7,14 +7,7 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Video.js CSS -->
     <link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet" />
-
-    <!-- Vercel Web Analytics -->
-    <script>
-        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-    </script>
-    <script defer src="/_vercel/insights/script.js"></script>
 
     <style>
         * {
@@ -612,7 +605,6 @@
 </head>
 <body>
 
-    <!-- 🎬 WELCOME SPLASH SCREEN (৩ সেকেন্ডের ওপেনিং অ্যানিমেশন) -->
     <div id="splash-screen">
         <img src="https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/5db0c6a0-5095-42cb-b9db-176c1976c705.jpg" alt="MH Developer" class="splash-avatar">
         <h1 class="splash-title">Welcome to <span>MH Live Sports</span></h1>
@@ -621,7 +613,6 @@
         </div>
     </div>
 
-    <!-- OTT Premium Header -->
     <header class="ott-header">
         <div class="header-left">
             <div class="app-logo">MH Stream <span class="logo-dot"></span></div>
@@ -639,10 +630,8 @@
         </div>
     </header>
 
-    <!-- Main Content Layout -->
     <main class="main-layout">
         
-        <!-- Premium TV Player Container -->
         <section class="player-section">
             <video 
                 id="mh-vjs-player" 
@@ -655,10 +644,8 @@
                 webkit-playsinline>
             </video>
 
-            <!-- 🕹️ FLOATING OVERLAY PANEL -->
             <div class="player-top-overlay">
                 
-                <!-- 📺 VIDEO RUNNING TEXT -->
                 <div class="player-ticker">
                     <div class="ticker-badge">NOTICE</div>
                     <div class="ticker-text-container">
@@ -669,15 +656,12 @@
                     </div>
                 </div>
 
-                <!-- 🎛️ CONTROLS CONTAINER -->
                 <div class="server-and-actions">
-                    <!-- Multi-Server Controller -->
                     <div class="server-controller">
                         <button class="server-btn active-server" id="srv1" onclick="switchServer(1)">Server 1</button>
                         <button class="server-btn" id="srv2" onclick="switchServer(2)">Server 2</button>
                     </div>
 
-                    <!-- Action Buttons Group -->
                     <div class="player-overlay-actions">
                         <button class="tv-action-btn" id="rotateBtn" onclick="toggleScreenRotation()">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -698,7 +682,6 @@
             </div>
         </section>
 
-        <!-- TV Station Metadata Panel -->
         <section class="channel-details">
             <div class="channel-info">
                 <h2>T Sports Live <span class="live-badge">LIVE</span></h2>
@@ -712,7 +695,6 @@
 
     </main>
 
-    <!-- Live TV Ticker News Bar (Bottom) -->
     <div class="ticker-wrap">
         <div class="ticker-title">MH BROADCAST</div>
         <div class="ticker">
@@ -722,12 +704,11 @@
         </div>
     </div>
 
-    <!-- Video.js JavaScript CDN -->
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
 
     <script>
         const servers = {
-            1: https://1nyaler.streamhostingcdn.top/stream/32/index.m3u8',
+            1: 'https://1nyaler.streamhostingcdn.top/stream/32/index.m3u8',
             2: 'https://1nyaler.streamhostingcdn.top/stream/23/index.m3u8'
         };
         
@@ -740,7 +721,7 @@
                 const splash = document.getElementById('splash-screen');
                 splash.style.opacity = '0';
                 splash.style.visibility = 'hidden';
-            }, 3000); // ৩০০০ মিলিভোল্ট = ৩ সেকেন্ড
+            }, 3000);
         });
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -765,6 +746,8 @@
         function loadStream(url) {
             if (!player) return;
             player.pause();
+            
+            // প্রমিত HLS স্ট্রিমিং ফরম্যাট টাইপ
             player.src({ src: url, type: 'application/x-mpegURL' });
             player.load();
 
