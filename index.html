@@ -208,16 +208,17 @@
             margin: 0 auto;
             padding: 0 20px 60px 20px;
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* ── 🖥️ FIXED COMPUTER BIG SCREEN FIX ── */
+        /* ── 🖥️ PLAYER CONTAINER SECTION ── */
         .player-section {
             background: #000;
             border-radius: 20px;
             overflow: hidden;
             width: 100%;
             aspect-ratio: 16/9;
-            max-height: 70vh; /* কম্পিউটার স্ক্রিনে প্লেয়ার যাতে অতিরিক্ত বড় না হয় */
             position: relative;
             border: 1px solid rgba(255, 31, 68, 0.2);
             box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 
@@ -231,8 +232,7 @@
         .video-js {
             width: 100% !important;
             height: 100% !important;
-            object-fit: contain;
-            z-index: 1;
+            display: block;
         }
 
         .player-top-overlay {
@@ -512,7 +512,6 @@
             inset: 0 !important;
             width: 100vw !important;
             height: 100vh !important;
-            max-height: 100vh !important;
             border-radius: 0 !important;
             border: none !important;
             z-index: 99999 !important;
@@ -538,10 +537,25 @@
             box-shadow: 0 0 25px rgba(255, 31, 68, 0.6) !important;
         }
 
-        @media (max-width: 850px) {
-            .player-section {
-                max-height: none; /* মোবাইলে আগের মতোই রেসপন্সিভ থাকবে */
+        /* ── 📺 ANDROID TV / SMART TV & LARGE SCREEN OPTIMIZATION ── */
+        @media screen and (min-width: 1200px) {
+            .main-layout {
+                max-width: 1280px; 
             }
+            .player-section {
+                aspect-ratio: 16/9;
+                max-height: 65vh; /* টিভির স্ক্রিন অনুযায়ী নির্দিষ্ট উচ্চতা */
+                width: 100% !important;
+                clear: both;
+                display: block;
+            }
+            .channel-details {
+                margin-top: 25px;
+                clear: both;
+            }
+        }
+
+        @media (max-width: 850px) {
             .player-top-overlay {
                 flex-direction: column;
                 align-items: flex-end;
@@ -592,7 +606,6 @@
             body.force-landscape.forced-fullscreen .player-section {
                 width: 100vh !important;
                 height: 100vw !important;
-                max-height: 100vw !important;
             }
         }
 
