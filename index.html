@@ -4,18 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- ── 🎯 GOOGLE SITE VERIFICATION TAGS ── -->
     <meta name="google-site-verification" content="4YhRDt5orcyd0D7nIem7u8ZeDK7fQ9C8d93G04uDoLY" />
     <meta name="google-site-verification" content="google445e064c3e6b735a" />
 
-    <!-- ── 📝 SEO META TAGS ── -->
     <title>MH Live Sports - রাফি ভাইয়ের খেলার অ্যাপস | লাইভ খেলা দেখার ওয়েবসাইট</title>
     <meta name="description" content="MH Live Sports এ দেখুন ফুটবল, ক্রিকেটসহ সমস্ত লাইভ খেলা একদম ফ্রিতে। রাফি ভাইয়ের খেলার অ্যাপস ও ওয়েবসাইটে উপভোগ করুন FIFA World Cup 2026, Brazil Vs Argentina ম্যাচসহ Ultra HD লাইভ স্ট্রিমিং।">
     <meta name="keywords" content="MH Live Sports, রাফি ভাইয়ের খেলার অ্যাপস, রাফি ভাই, রাফি ভাই কে, fifa world cup 2026, Brazil Vs Argentina, live khela, লাইভ খেলা দেখার ওয়েবসাইট, ফুটবল খেলা, T Sports Live, Live Football BD, MH Stream, রাফি ভাইয়ের লাইভ টিভি, আজ কার খেলা">
     <meta name="author" content="MH RAFI">
     <meta name="robots" content="index, follow">
 
-    <!-- ── 📱 SOCIAL MEDIA SEO (OPEN GRAPH & TWITTER) ── -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="MH Live Sports - রাফি ভাইয়ের খেলার অ্যাপস">
     <meta property="og:description" content="ফিফা ওয়ার্ল্ড কাপ ২০২৬ ও ব্রাজিল বনাম আর্জেন্টিনার হাই-ভোল্টেজ ম্যাচসহ সব খেলা সরাসরি দেখতে ভিজিট করুন লাইভ খেলা দেখার সেরা ওয়েবসাইট MH Live Sports-এ।">
@@ -213,11 +210,14 @@
             position: relative;
         }
 
+        /* ── 🖥️ FIXED COMPUTER BIG SCREEN FIX ── */
         .player-section {
             background: #000;
             border-radius: 20px;
             overflow: hidden;
+            width: 100%;
             aspect-ratio: 16/9;
+            max-height: 70vh; /* কম্পিউটার স্ক্রিনে প্লেয়ার যাতে অতিরিক্ত বড় না হয় */
             position: relative;
             border: 1px solid rgba(255, 31, 68, 0.2);
             box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 
@@ -231,6 +231,7 @@
         .video-js {
             width: 100% !important;
             height: 100% !important;
+            object-fit: contain;
             z-index: 1;
         }
 
@@ -511,6 +512,7 @@
             inset: 0 !important;
             width: 100vw !important;
             height: 100vh !important;
+            max-height: 100vh !important;
             border-radius: 0 !important;
             border: none !important;
             z-index: 99999 !important;
@@ -537,6 +539,9 @@
         }
 
         @media (max-width: 850px) {
+            .player-section {
+                max-height: none; /* মোবাইলে আগের মতোই রেসপন্সিভ থাকবে */
+            }
             .player-top-overlay {
                 flex-direction: column;
                 align-items: flex-end;
@@ -587,6 +592,7 @@
             body.force-landscape.forced-fullscreen .player-section {
                 width: 100vh !important;
                 height: 100vw !important;
+                max-height: 100vw !important;
             }
         }
 
