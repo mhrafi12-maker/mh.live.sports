@@ -8,7 +8,7 @@
     <meta name="google-site-verification" content="google445e064c3e6b735a" />
 
     <title>MH Live Sports - রাফি ভাইয়ের খেলার অ্যাপস | লাইভ খেলা দেখার ওয়েবসাইট</title>
-    <meta name="description" content="MH Live Sports এ দেখুন ফুটবল, ক্রিকেটসহ সমস্ত লাইভ খেলা একদম ফ্রিতে। রাফি ভাইয়ের খেলার অ্যাপস ও ওয়েবসাইটে উপভোগ করুন FIFA World Cup 2026, Brazil Vs Argentina ম্যাচসহ Ultra HD লাইভ স্ট্রিমিং।">
+    <meta name="description" content="MH Live Sports এ দেখুন ফুটবল, cricketসহ সমস্ত লাইভ খেলা একদম ফ্রিতে। রাফি ভাইয়ের খেলার অ্যাপস ও ওয়েবসাইটে উপভোগ করুন FIFA World Cup 2026, Brazil Vs Argentina ম্যাচসহ Ultra HD লাইভ স্ট্রিমিং।">
     <meta name="keywords" content="MH Live Sports, রাফি ভাইয়ের খেলার অ্যাপস, রাফি ভাই, রাফি ভাই কে, fifa world cup 2026, Brazil Vs Argentina, live khela, লাইভ খেলা দেখার ওয়েবসাইট, ফুটবল খেলা, T Sports Live, Live Football BD, MH Stream, রাফি ভাইয়ের লাইভ টিভি, আজ কার খেলা">
     <meta name="author" content="MH RAFI">
     <meta name="robots" content="index, follow">
@@ -307,6 +307,8 @@
             display: flex;
             gap: 10px;
             pointer-events: auto;
+            flex-wrap: nowrap;
+            align-items: center;
         }
 
         .server-controller {
@@ -326,7 +328,7 @@
             color: #94a3b8;
             font-size: 12px;
             font-weight: 700;
-            padding: 0 14px;
+            padding: 0 12px;
             height: 32px;
             border-radius: 7px;
             cursor: pointer;
@@ -544,7 +546,7 @@
             }
             .player-section {
                 aspect-ratio: 16/9;
-                max-height: 65vh; /* টিভির স্ক্রিন অনুযায়ী নির্দিষ্ট উচ্চতা */
+                max-height: 65vh; 
                 width: 100% !important;
                 clear: both;
                 display: block;
@@ -555,7 +557,7 @@
             }
         }
 
-        @media (max-width: 850px) {
+        @media (max-width: 990px) {
             .player-top-overlay {
                 flex-direction: column;
                 align-items: flex-end;
@@ -583,6 +585,7 @@
                 align-items: center;
                 width: 100%;
                 gap: 8px;
+                flex-wrap: wrap;
             }
             .server-controller {
                 height: 36px;
@@ -590,7 +593,7 @@
             }
             .server-btn {
                 height: 30px;
-                padding: 0 12px;
+                padding: 0 10px;
                 font-size: 11px;
             }
             .player-overlay-actions {
@@ -615,7 +618,7 @@
             .channel-details { padding: 15px; flex-direction: column; }
             .app-logo { font-size: 22px; }
             .tv-action-btn { padding: 0 10px; }
-            .server-btn { padding: 0 8px; }
+            .server-btn { padding: 0 6px; font-size: 10px; }
             .splash-title { font-size: 16px; }
             .splash-avatar { width: 100px; height: 100px; }
         }
@@ -668,16 +671,18 @@
                     <div class="ticker-badge">NOTICE</div>
                     <div class="ticker-text-container">
                         <div class="player-marquee">
+                            <span class="marquee-item">⚠️ খেলা দেখতে কোনো সমস্যা হলে অন্য সার্ভার গুলো দিয়ে দেখেন।</span>
                             <span class="marquee-item">🎉 Welcome to MH Live Sports! Enjoy uninterrupted Ultra HD streaming experience.</span>
-                            <span class="marquee-item">⚡ If buffering issues occur, please switch servers or check your connection.</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="server-and-actions">
                     <div class="server-controller">
-                        <button class="server-btn active-server" id="srv1" onclick="switchServer(1)">Server 1</button>
-                        <button class="server-btn" id="srv2" onclick="switchServer(2)">Server 2</button>
+                        <button class="server-btn active-server" id="srv1" onclick="switchServer(1)">S1</button>
+                        <button class="server-btn" id="srv2" onclick="switchServer(2)">S2</button>
+                        <button class="server-btn" id="srv3" onclick="switchServer(3)">S3</button>
+                        <button class="server-btn" id="srv4" onclick="switchServer(4)">S4</button>
                     </div>
 
                     <div class="player-overlay-actions">
@@ -716,9 +721,9 @@
     <div class="ticker-wrap">
         <div class="ticker-title">MH BROADCAST</div>
         <div class="ticker">
+            <div class="ticker-item">📢 খেলা দেখতে কোনো সমস্যা হলে অন্য সার্ভার গুলো দিয়ে দেখেন।</div>
             <div class="ticker-item">⚡ Welcome to the all-new premium TV application update!</div>
             <div class="ticker-item">⚽ High definition uninterrupted buffering-free live stream is now broadcasted.</div>
-            <div class="ticker-item">🎬 Use the floating 'Rotate' and 'Cinema' buttons right on top of the player for a quick theater layout switch!</div>
         </div>
     </div>
 
@@ -727,7 +732,9 @@
     <script>
         const servers = {
             1: 'https://1nyaler.streamhostingcdn.top/stream/32/index.m3u8',
-            2: 'https://1nyaler.streamhostingcdn.top/stream/23/index.m3u8'
+            2: 'https://1nyaler.streamhostingcdn.top/stream/23/index.m3u8',
+            3: 'https://1nyaler.streamhostingcdn.top/stream/106/index.m3u8',
+            4: 'https://1nyaler.streamhostingcdn.top/stream/97/index.m3u8'
         };
         
         let currentPlayerServer = 1;
@@ -744,9 +751,14 @@
         document.addEventListener("DOMContentLoaded", () => {
             player = videojs('mh-vjs-player', {
                 responsive: true,
-                fluid: false, 
+                fluid: false,
+                liveui: true,
                 html5: {
-                    vhs: { overrideNative: true }
+                    vhs: { 
+                        overrideNative: true,
+                        maxBufferLength: 30,
+                        backBufferLength: 15
+                    }
                 },
                 controlBar: {
                     pictureInPictureToggle: false,
@@ -779,8 +791,11 @@
         function switchServer(serverNum) {
             if (serverNum === currentPlayerServer) return;
             currentPlayerServer = serverNum;
-            document.getElementById('srv1').classList.toggle('active-server', serverNum === 1);
-            document.getElementById('srv2').classList.toggle('active-server', serverNum === 2);
+            
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById('srv' + i).classList.toggle('active-server', i === serverNum);
+            }
+            
             loadStream(servers[serverNum]);
         }
 
