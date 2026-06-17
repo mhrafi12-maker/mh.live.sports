@@ -19,7 +19,7 @@
     <meta property="og:image" content="https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/5db0c6a0-5095-42cb-b9db-176c1976c705.jpg">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="MH Live Sports - রাফি ভাইয়ের খেলার অ্যাপস">
-    <meta name="twitter:description" content="সব ধরণের ফুটবল ও ক্রিকেট খেলা লাইভ উপভোগ করুন রাফি ভাইয়ের নিজস্ব স্ট্রিমিং প্ল্যাটফর্মে Regel।">
+    <meta name="twitter:description" content="সব ধরণের ফুটবল ও ক্রিকেট খেলা লাইভ উপভোগ করুন রাফি ভাইয়ের নিজস্ব স্ট্রিমিং প্ল্যাটফর্মে।">
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet" />
@@ -38,12 +38,11 @@
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
-            overflow-y: auto !important; /* টিভিতে নিচে স্ক্রোল করার বাধ্যবাধকতা সচল করা হলো */
-            transition: transform 0.4s ease;
-            padding-bottom: 60px; /* নিচের টিকরের জন্য এক্সট্রা স্পেস */
+            overflow-y: auto !important;
+            padding-bottom: 60px;
         }
 
-        /* ── 🎬 PREMIUM APP OPENING ANIMATION (SPLASH SCREEN) ── */
+        /* ── 🎬 PREMIUM SPLASH SCREEN ── */
         #splash-screen {
             position: fixed;
             top: 0;
@@ -59,34 +58,22 @@
             gap: 20px;
             transition: opacity 0.5s ease, visibility 0.5s ease;
         }
-        
         .splash-avatar {
             width: 120px;
             height: 120px;
             border-radius: 50%;
             object-fit: cover;
             border: 3px solid #ff1f44;
-            box-shadow: 0 0 20px rgba(255, 31, 68, 0.4), 0 0 40px rgba(255, 31, 68, 0.2);
-            opacity: 0;
-            transform: scale(0.6);
-            animation: splashImageFade 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 0.3s;
+            box-shadow: 0 0 20px rgba(255, 31, 68, 0.4);
         }
-        
         .splash-title {
             color: #fff;
             font-size: 22px;
             font-weight: 700;
-            letter-spacing: 2px;
             text-transform: uppercase;
             text-align: center;
-            opacity: 0;
-            text-shadow: 0 0 10px rgba(255, 31, 68, 0.5);
-            animation: splashTextFade 1.5s ease forwards 0.6s;
         }
-        .splash-title span {
-            color: #ff1f44;
-        }
-        
+        .splash-title span { color: #ff1f44; }
         .splash-loader-bar {
             width: 150px;
             height: 3px;
@@ -94,7 +81,6 @@
             border-radius: 5px;
             overflow: hidden;
             position: relative;
-            margin-top: 10px;
         }
         .splash-loader-progress {
             width: 100%;
@@ -102,18 +88,7 @@
             background: #ff1f44;
             position: absolute;
             left: -100%;
-            border-radius: 5px;
-            box-shadow: 0 0 10px #ff1f44;
-            animation: loaderProgress 2.2s cubic-bezier(0.4, 0, 0.2, 1) forwards 0.5s;
-        }
-
-        @keyframes splashImageFade {
-            0% { opacity: 0; transform: scale(0.6); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-        @keyframes splashTextFade {
-            0% { opacity: 0; transform: translateY(10px); letter-spacing: 0px; }
-            100% { opacity: 1; transform: translateY(0); letter-spacing: 2px; }
+            animation: loaderProgress 2s ease forwards 0.5s;
         }
         @keyframes loaderProgress {
             0% { left: -100%; }
@@ -139,83 +114,25 @@
             align-items: center;
             z-index: 100;
         }
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 40px;
-        }
-        .app-logo {
-            font-size: 26px;
-            font-weight: 700;
-            color: #fff;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-shadow: 0 0 10px rgba(255, 31, 68, 0.3);
-        }
-        .logo-dot {
-            width: 10px;
-            height: 10px;
-            background: #ff1f44;
-            border-radius: 50%;
-            box-shadow: 0 0 15px #ff1f44, 0 0 30px #ff1f44;
-            animation: logoPulse 2s infinite alternate;
-        }
-        @keyframes logoPulse {
-            0% { transform: scale(0.9); opacity: 0.7; box-shadow: 0 0 10px #ff1f44; }
-            100% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 20px #ff1f44, 0 0 35px #ff1f44; }
-        }
-        .nav-menu {
-            display: flex;
-            gap: 25px;
-            list-style: none;
-        }
-        .nav-item a {
-            color: #94a3b8;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        .nav-item.active a, .nav-item a:hover {
-            color: #ff1f44;
-            text-shadow: 0 0 10px rgba(255, 31, 68, 0.5);
-        }
-        
-        .profile-container {
-            display: flex;
-            align-items: center;
-        }
-        .profile-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            object-fit: cover;
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .profile-icon:hover {
-            border-color: #ff1f44;
-            box-shadow: 0 0 15px rgba(255, 31, 68, 0.6);
-            transform: scale(1.05);
-        }
+        .header-left { display: flex; align-items: center; gap: 40px; }
+        .app-logo { font-size: 26px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; }
+        .logo-dot { width: 10px; height: 10px; background: #ff1f44; border-radius: 50%; }
+        .profile-icon { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
 
-        /* ── MAIN CONTENT CONTAINER (SCROLLABLE) ── */
+        /* ── MAIN CONTENT LAYOUT ── */
         .main-layout {
             flex: 1;
             max-width: 1100px;
             width: 100%;
             margin: 0 auto;
-            padding: 0 20px 100px 20px; /* বটমে পর্যাপ্ত স্পেস দেওয়া হলো স্ক্রোলের সুবিধার্থে */
-            position: relative;
+            padding: 0 20px 80px 20px;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* 🛠️ কন্ট্রোল ওভারলে প্যানেল ফিক্স (ভিডিওর সাউন্ড বাটন ঢেকে দেওয়া বন্ধ করতে এটি এখন ভিডিওর ওপরে থাকবে) */
+        /* ── TOP ACTION & NOTICE BAR ── */
         .player-top-overlay {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -223,136 +140,39 @@
             width: 100%;
         }
 
-        /* Responsive TV Player Wrapper with Premium Neon Glow */
-        .player-section {
-            background: #000;
-            border-radius: 20px;
-            overflow: hidden;
-            width: 100%;
-            aspect-ratio: 16/9;
-            position: relative;
-            border: 1px solid rgba(255, 31, 68, 0.2);
-            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 
-                        0 0 30px rgba(255, 31, 68, 0.05);
-            animation: neonPulse 4s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        @keyframes neonPulse {
-            0% { border-color: rgba(255, 31, 68, 0.2); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 31, 68, 0.05); }
-            100% { border-color: rgba(255, 31, 68, 0.45); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 31, 68, 0.15); }
-        }
-        
-        .video-js {
-            width: 100% !important;
-            height: 100% !important;
-            display: block;
-            z-index: 1;
-        }
-
-        /* ── 📺 VIDEO RUNNING TEXT (MARQUEE) ── */
         .player-ticker {
             background: rgba(8, 12, 22, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            height: 38px;
+            height: 42px;
             border-radius: 10px;
             display: flex;
             align-items: center;
             overflow: hidden;
             flex: 1;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
         }
         .ticker-badge {
             background: #ff1f44;
             color: #fff;
             font-size: 11px;
             font-weight: 700;
-            padding: 0 12px;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            white-space: nowrap;
-            letter-spacing: 0.5px;
-            border-top-left-radius: 9px;
-            border-bottom-left-radius: 9px;
-            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.3);
-        }
-        .ticker-text-container {
-            overflow: hidden;
-            position: relative;
-            width: 100%;
+            padding: 0 15px;
             height: 100%;
             display: flex;
             align-items: center;
         }
-        .player-marquee {
-            display: flex;
-            white-space: nowrap;
-            padding-left: 100%;
-            animation: playerMarquee 15s linear infinite;
-        }
-        .marquee-item {
-            font-size: 12px;
-            color: #fff;
-            font-weight: 600;
-            padding-right: 50px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
-        @keyframes playerMarquee {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-100%, 0, 0); }
-        }
+        .ticker-text-container { overflow: hidden; width: 100%; display: flex; align-items: center; }
+        .player-marquee { display: flex; white-space: nowrap; padding-left: 100%; animation: playerMarquee 15s linear infinite; }
+        .marquee-item { font-size: 12px; color: #fff; font-weight: 600; padding-right: 50px; }
+        @keyframes playerMarquee { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
-        /* ── 🔀 BUTTONS CONTROLLER GROUP ── */
-        .server-and-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
+        .server-and-actions { display: flex; gap: 10px; align-items: center; }
+        .server-controller { display: flex; background: rgba(8, 12, 22, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); padding: 4px; border-radius: 10px; gap: 4px; }
+        .server-btn { background: transparent; border: none; color: #94a3b8; font-size: 12px; font-weight: 700; padding: 0 14px; height: 34px; border-radius: 7px; cursor: pointer; }
+        .server-btn.active-server { background: #ff1f44; color: #fff; }
 
-        .server-controller {
-            display: flex;
-            background: rgba(8, 12, 22, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 3px;
-            border-radius: 10px;
-            gap: 4px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-        }
-        .server-btn {
-            background: transparent;
-            border: none;
-            color: #94a3b8;
-            font-size: 12px;
-            font-weight: 700;
-            padding: 0 12px;
-            height: 32px;
-            border-radius: 7px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-        .server-btn:hover {
-            color: #fff;
-            background: rgba(255, 255, 255, 0.05);
-        }
-        .server-btn.active-server {
-            background: #ff1f44;
-            color: #fff;
-            box-shadow: 0 0 10px rgba(255, 31, 68, 0.4);
-        }
-
-        .player-overlay-actions {
-            display: flex;
-            gap: 10px;
-        }
         .tv-action-btn {
             background: rgba(8, 12, 22, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             color: #fff;
             padding: 0 16px;
             font-size: 12px;
@@ -362,97 +182,55 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            user-select: none;
-            height: 38px;
+            height: 42px;
         }
-        .tv-action-btn.cinema-trigger {
-            border-color: rgba(255, 31, 68, 0.4);
-            background: rgba(255, 31, 68, 0.15);
+        .tv-action-btn.active-state { background: #ff1f44; border-color: transparent; }
+
+        /* ── 📺 VIDEO PLAYER CONTAINER FIXED ── */
+        .player-section {
+            background: #000000 !important;
+            border-radius: 20px;
+            width: 100% !important;
+            position: relative;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9);
+            border: 2px solid rgba(255, 31, 68, 0.25);
+            aspect-ratio: 16/9 !important;
+            display: block !important;
+            overflow: hidden !important;
         }
-        .tv-action-btn:hover {
-            background: linear-gradient(135deg, #ff1f44 0%, #b91c1c 100%);
-            border-color: transparent;
-            box-shadow: 0 6px 20px rgba(255, 31, 68, 0.5);
-            transform: translateY(-2px);
+        
+        .video-js {
+            width: 100% !important;
+            height: 100% !important;
+            display: block !important;
+            background-color: #000000 !important;
         }
-        .tv-action-btn.active-state {
-            background: #ff1f44;
-            border-color: transparent;
-            box-shadow: 0 4px 15px rgba(255, 31, 68, 0.4);
+        
+        .video-js .vjs-tech {
+            position: relative !important;
+            width: 100% !important;
+            height: 100% !important;
+            display: block !important;
+            object-fit: contain !important;
         }
 
-        /* ── TV CHANNEL METADATA ── */
+        /* ── CHANNEL INFO METADATA ── */
         .channel-details {
             margin-top: 30px;
             background: rgba(11, 17, 32, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
             padding: 25px;
             border-radius: 16px;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            gap: 20px;
         }
-        .channel-info h2 {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-        .live-badge {
-            background: #ff1f44;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 3px 10px;
-            border-radius: 6px;
-            letter-spacing: 0.5px;
-            box-shadow: 0 0 15px rgba(255, 31, 68, 0.6);
-            animation: liveGlow 1.2s infinite alternate;
-        }
-        @keyframes liveGlow {
-            0% { opacity: 0.8; box-shadow: 0 0 10px rgba(255, 31, 68, 0.4); }
-            100% { opacity: 1; box-shadow: 0 0 20px rgba(255, 31, 68, 0.8); }
-        }
-        .channel-info p {
-            font-size: 13px;
-            color: #94a3b8;
-            line-height: 1.7;
-            max-width: 700px;
-        }
-        .channel-status-tags {
-            display: flex;
-            gap: 12px;
-        }
-        .status-tag {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            color: #cbd5e1;
-        }
-        .status-tag.active-viewers {
-            border-color: rgba(16, 185, 129, 0.3);
-            background: rgba(16, 185, 129, 0.02);
-        }
-        .status-tag.active-viewers::before {
-            content: '';
-            display: inline-block;
-            width: 7px;
-            height: 7px;
-            background: #10b981;
-            border-radius: 50%;
-            margin-right: 8px;
-            box-shadow: 0 0 8px #10b981;
-        }
+        .channel-info h2 { font-size: 24px; font-weight: 600; display: flex; align-items: center; gap: 14px; }
+        .live-badge { background: #ff1f44; font-size: 11px; padding: 3px 10px; border-radius: 6px; }
+        .channel-info p { font-size: 13px; color: #94a3b8; margin-top: 5px; }
+        .status-tag { background: rgba(255, 255, 255, 0.05); padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; }
 
-        /* ── LIVE TV TICKER (BOTTOM NEWS BAR) ── */
+        /* ── BOTTOM RUNNING TEXT TICKER ── */
         .ticker-wrap {
             position: fixed;
             bottom: 0;
@@ -461,143 +239,71 @@
             overflow: hidden;
             height: 38px;
             background-color: #070a14;
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
             display: flex;
             align-items: center;
             z-index: 999;
         }
-        .ticker-title {
-            background: linear-gradient(135deg, #ff1f44 0%, #b91c1c 100%);
-            color: white;
-            padding: 0 20px;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            font-size: 12px;
-            font-weight: 700;
-            z-index: 2;
-            white-space: nowrap;
-            box-shadow: 5px 0 15px rgba(0,0,0,0.4);
-        }
-        .ticker {
-            display: flex;
-            white-space: nowrap;
-            padding-left: 100%;
-            animation: ticker 28s linear infinite;
-        }
-        .ticker-item {
-            display: inline-block;
-            padding: 0 2.5rem;
-            font-size: 13px;
-            color: #cbd5e1;
-            font-weight: 500;
-        }
-        @keyframes ticker {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-100%, 0, 0); }
-        }
+        .ticker-title { background: #ff1f44; color: white; padding: 0 20px; height: 100%; display: flex; align-items: center; font-size: 12px; font-weight: 700; }
+        .ticker { display: flex; white-space: nowrap; padding-left: 100%; animation: ticker 28s linear infinite; }
+        .ticker-item { padding: 0 2.5rem; font-size: 13px; color: #cbd5e1; }
+        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
-        /* ── FORCED FULL SCREEN TV MODE ── */
-        body.forced-fullscreen {
-            overflow: hidden !important;
-        }
+        /* ── 🎬 CINEMA MODE ULTRA TV FIX (বাটন হাইড হবে না, সাইজ পারফেক্ট থাকবে) ── */
         body.forced-fullscreen .ott-header, 
         body.forced-fullscreen .channel-details,
         body.forced-fullscreen .ticker-wrap,
-        body.forced-fullscreen .player-top-overlay {
-            display: none !important;
+        body.forced-fullscreen .player-top-overlay .player-ticker { 
+            display: none !important; 
         }
-        body.forced-fullscreen .main-layout {
-            padding: 0 !important;
-            max-width: 100vw !important;
-            width: 100vw !important;
-        }
-        body.forced-fullscreen .player-section {
-            position: fixed !important;
-            inset: 0 !important;
-            width: 100vw !important;
+        
+        body.forced-fullscreen .main-layout { 
+            padding: 0 !important; 
+            max-width: 100vw !important; 
+            width: 100vw !important; 
             height: 100vh !important;
-            border-radius: 0 !important;
-            border: none !important;
-            z-index: 99999 !important;
-            animation: none !important;
+            justify-content: flex-start;
+        }
+        
+        body.forced-fullscreen .player-section { 
+            border-radius: 0 !important; 
+            border: none !important; 
+            width: 100vw !important;
+            height: 75vh !important; /* স্ক্রিনের বড় অংশ জুড়ে শুধু ভিডিও থাকবে */
+            aspect-ratio: auto !important;
         }
 
-        /* Video.js Big Play Button Custom Design */
+        body.forced-fullscreen .player-top-overlay {
+            margin-top: 15px;
+            margin-bottom: 0;
+            padding: 0 20px;
+            width: 100vw !important;
+            justify-content: center !important; /* বাটনগুলো স্ক্রিনের মাঝে নিয়ে আসবে */
+        }
+        body.forced-fullscreen .server-and-actions {
+            background: rgba(4, 6, 15, 0.95);
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        /* Big Play Button Overlay Styling */
         .vjs-big-play-centered .vjs-big-play-button {
             background: linear-gradient(135deg, #ff1f44 0%, #cc0026 100%) !important;
             border: none !important;
             border-radius: 50% !important;
-            width: 70px !important;
-            height: 70px !important;
-            line-height: 70px !important;
-            margin-top: -35px !important;
-            margin-left: -35px !important;
-            box-shadow: 0 0 25px rgba(255, 31, 68, 0.6) !important;
+            width: 70px; height: 70px; line-height: 70px; margin-top: -35px; margin-left: -35px;
         }
 
-        /* ── 📱 MOBILE & TV ULTRA-RESPONSIVE RE-FIX ── */
+        /* Responsive Breakpoints */
         @media (max-width: 950px) {
-            .player-top-overlay {
-                flex-direction: column;
-                align-items: flex-end;
-                gap: 10px;
-            }
-            .player-ticker {
-                width: 100%;
-                height: 32px;
-            }
-            .ticker-badge {
-                font-size: 10px;
-                padding: 0 8px;
-            }
-            .marquee-item {
-                font-size: 11px;
-                padding-right: 35px;
-            }
-            .server-and-actions {
-                display: flex;
-                flex-direction: row;
-                justify-content: flex-end;
-                align-items: center;
-                width: 100%;
-                gap: 8px;
-                flex-wrap: wrap;
-            }
-            .server-controller {
-                height: 36px;
-                padding: 2px;
-            }
-            .server-btn {
-                height: 30px;
-                padding: 0 10px;
-                font-size: 11px;
-            }
-            .player-overlay-actions {
-                display: flex;
-                gap: 8px;
-            }
-            .tv-action-btn {
-                height: 36px;
-                padding: 0 14px;
-                font-size: 11px;
-                border-radius: 10px;
-            }
-            body.force-landscape.forced-fullscreen .player-section {
-                width: 100vh !important;
-                height: 100vw !important;
-            }
+            .player-top-overlay { flex-direction: column; align-items: flex-end; gap: 10px; }
+            .server-and-actions { width: 100%; justify-content: flex-end; flex-wrap: wrap; }
+            body.forced-fullscreen .player-top-overlay { flex-direction: row; }
         }
-
         @media (max-width: 480px) {
             .ott-header { padding: 15px 20px; }
-            .nav-menu { display: none; }
-            .channel-details { padding: 15px; flex-direction: column; }
-            .app-logo { font-size: 22px; }
-            .tv-action-btn { padding: 0 10px; }
-            .server-btn { padding: 0 6px; font-size: 10px; }
-            .splash-title { font-size: 16px; }
-            .splash-avatar { width: 100px; height: 100px; }
+            .channel-details { padding: 15px; flex-direction: column; gap: 15px; }
         }
     </style>
 </head>
@@ -606,25 +312,15 @@
     <div id="splash-screen">
         <img src="https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/5db0c6a0-5095-42cb-b9db-176c1976c705.jpg" alt="MH Developer" class="splash-avatar">
         <h1 class="splash-title">Welcome to <span>MH Live Sports</span></h1>
-        <div class="splash-loader-bar">
-            <div class="splash-loader-progress"></div>
-        </div>
+        <div class="splash-loader-bar"><div class="splash-loader-progress"></div></div>
     </div>
 
     <header class="ott-header">
         <div class="header-left">
             <div class="app-logo">MH Stream <span class="logo-dot"></span></div>
-            <ul class="nav-menu">
-                <li class="nav-item active"><a href="#">Live TV</a></li>
-                <li class="nav-item"><a href="#">Sports</a></li>
-                <li class="nav-item"><a href="#">Movies</a></li>
-                <li class="nav-item"><a href="#">Premium</a></li>
-            </ul>
         </div>
         <div class="header-right">
-            <div class="profile-container">
-                <img src="https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/5db0c6a0-5095-42cb-b9db-176c1976c705.jpg" alt="Developer Profile" class="profile-icon">
-            </div>
+            <img src="https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/5db0c6a0-5095-42cb-b9db-176c1976c705.jpg" alt="Developer Profile" class="profile-icon">
         </div>
     </header>
 
@@ -650,19 +346,8 @@
                 </div>
 
                 <div class="player-overlay-actions">
-                    <button class="tv-action-btn" id="rotateBtn" onclick="toggleScreenRotation()">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
-                        </svg>
-                        <span id="rotateBtnText">Rotate</span>
-                    </button>
-
-                    <button class="tv-action-btn cinema-trigger" id="customFSBtn" onclick="toggleForcedFullscreen()">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
-                        </svg>
-                        <span id="fsBtnText">Cinema</span>
-                    </button>
+                    <button class="tv-action-btn" id="rotateBtn" onclick="toggleScreenRotation()">Rotate</button>
+                    <button class="tv-action-btn" id="customFSBtn" onclick="toggleForcedFullscreen()">Cinema</button>
                 </div>
             </div>
         </div>
@@ -675,18 +360,16 @@
                 preload="auto"
                 autoplay
                 muted
-                playsinline
-                webkit-playsinline>
+                playsinline>
             </video>
         </section>
 
         <section class="channel-details">
             <div class="channel-info">
                 <h2>T Sports Live <span class="live-badge">LIVE</span></h2>
-                <p>Enjoy continuous seamless streaming of premium sports events, cricket leagues, football highlights, and live talk shows directly from the official broadcaster network feed.</p>
+                <p>Enjoy continuous seamless streaming of premium sports events, cricket leagues, and football highlights.</p>
             </div>
             <div class="channel-status-tags">
-                <div class="status-tag active-viewers">14.8K Watching</div>
                 <div class="status-tag">1080p Ultra HD</div>
             </div>
         </section>
@@ -696,15 +379,14 @@
     <div class="ticker-wrap">
         <div class="ticker-title">MH BROADCAST</div>
         <div class="ticker">
-            <div class="ticker-item">⚡ Welcome to the all-new premium TV application update!</div>
             <div class="ticker-item">⚽ High definition uninterrupted buffering-free live stream is now broadcasted.</div>
-            <div class="ticker-item">🎬 Use the floating 'Rotate' and 'Cinema' buttons right on top of the player for a quick theater layout switch!</div>
         </div>
     </div>
 
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
 
     <script>
+        // তোমার অরিজিনাল ৪টি লাইভ সার্ভার লিঙ্ক
         const servers = {
             1: 'https://1nyaler.streamhostingcdn.top/stream/32/index.m3u8',
             2: 'https://1nyaler.streamhostingcdn.top/stream/23/index.m3u8',
@@ -718,22 +400,22 @@
         window.addEventListener("load", () => {
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
-                splash.style.opacity = '0';
-                splash.style.visibility = 'hidden';
-            }, 3000);
+                if(splash) {
+                    splash.style.opacity = '0';
+                    splash.style.visibility = 'hidden';
+                }
+            }, 2000);
         });
 
         document.addEventListener("DOMContentLoaded", () => {
             player = videojs('mh-vjs-player', {
                 responsive: true,
                 fluid: false, 
+                controls: true,
+                autoplay: true,
+                muted: true,
                 html5: {
                     vhs: { overrideNative: true }
-                },
-                controlBar: {
-                    pictureInPictureToggle: false,
-                    volumePanel: { inline: false },
-                    fullscreenToggle: false 
                 }
             });
 
@@ -744,18 +426,12 @@
 
         function loadStream(url) {
             if (!player) return;
-            player.pause();
-            
             player.src({ src: url, type: 'application/x-mpegURL' });
             player.load();
-
-            let playPromise = player.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(() => {
-                    player.muted(true);
-                    player.play();
-                });
-            }
+            player.play().catch(function(error) {
+                player.muted(true);
+                player.play();
+            });
         }
 
         function switchServer(serverNum) {
@@ -765,50 +441,24 @@
             for (let i = 1; i <= 4; i++) {
                 document.getElementById('srv' + i).classList.toggle('active-server', i === serverNum);
             }
-            
             loadStream(servers[serverNum]);
         }
 
         function toggleScreenRotation() {
-            const body = document.body;
-            const rotateBtn = document.getElementById('rotateBtn');
-            const rotateText = document.getElementById('rotateBtnText');
-
-            if (!body.classList.contains('force-landscape')) {
-                body.classList.add('force-landscape');
-                rotateBtn.classList.add('active-state');
-                if(rotateText) rotateText.innerText = "Portrait";
-            } else {
-                body.classList.remove('force-landscape');
-                rotateBtn.classList.remove('active-state');
-                if(rotateText) rotateText.innerText = "Rotate";
-            }
-
-            if(player) {
-                setTimeout(() => { player.handleResize(); }, 300);
-            }
+            document.body.classList.toggle('force-landscape');
+            if(player) { setTimeout(() => { player.handleResize(); }, 300); }
         }
 
         function toggleForcedFullscreen() {
-            const body = document.body;
-            const btnText = document.getElementById('fsBtnText');
-            const btn = document.getElementById('customFSBtn');
-
-            if (!body.classList.contains('forced-fullscreen')) {
-                body.classList.add('forced-fullscreen');
-                if(btnText) btnText.innerText = "Minimize";
-                btn.querySelector('svg').innerHTML = '<path d="M4 14h6v6M20 10h-6V4M14 10l7-7M10 14l-7 7"/>';
-            } else {
-                body.classList.remove('forced-fullscreen');
-                if(btnText) btnText.innerText = "Cinema";
-                btn.querySelector('svg').innerHTML = '<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>';
-            }
+            document.body.classList.toggle('forced-fullscreen');
             
-            if(player) {
-                setTimeout(() => { player.handleResize(); }, 300);
+            // সিনেমা মোড ট্রিপল বুস্ট ট্র্যাকিং রিসাইজ (টিভি ব্রাউজারের জন্য সবচেয়ে গুরুত্বপূর্ণ)
+            if(player) { 
+                setTimeout(() => { player.handleResize(); }, 100); 
+                setTimeout(() => { player.handleResize(); }, 300); 
+                setTimeout(() => { player.handleResize(); }, 600); 
             }
         }
     </script>
-
 </body>
 </html>
