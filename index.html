@@ -19,7 +19,7 @@
     <meta property="og:image" content="https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/5db0c6a0-5095-42cb-b9db-176c1976c705.jpg">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="MH Live Sports - রাফি ভাইয়ের খেলার অ্যাপস">
-    <meta name="twitter:description" content="সব ধরণের ফুটবল ও ক্রিকেট খেলা লাইভ উপভোগ করুন রাফি ভাইয়ের নিজস্ব স্ট্রিমিং প্ল্যাটফর্মে।">
+    <meta name="twitter:description" content="সব ধরণের ফুটবল ও ক্রিকেট খেলা লাইভ উপভোগ করুন রাফি ভাইয়ের নিজস্ব স্ট্রিমিং প্ল্যাটফর্মে Regel।">
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet" />
@@ -38,8 +38,9 @@
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
-            overflow-y: auto; /* বডিতে স্ক্রোলার সচল রাখার জন্য */
+            overflow-y: auto !important; /* টিভিতে নিচে স্ক্রোল করার বাধ্যবাধকতা সচল করা হলো */
             transition: transform 0.4s ease;
+            padding-bottom: 60px; /* নিচের টিকরের জন্য এক্সট্রা স্পেস */
         }
 
         /* ── 🎬 PREMIUM APP OPENING ANIMATION (SPLASH SCREEN) ── */
@@ -202,25 +203,33 @@
             transform: scale(1.05);
         }
 
-        /* ── MAIN CONTENT CONTAINER (WITH SMOOTH SCROLL) ── */
+        /* ── MAIN CONTENT CONTAINER (SCROLLABLE) ── */
         .main-layout {
             flex: 1;
             max-width: 1100px;
             width: 100%;
             margin: 0 auto;
-            padding: 0 20px 80px 20px; /* নিচের মার্জিন বাড়ানো হয়েছে সেফটির জন্য */
+            padding: 0 20px 100px 20px; /* বটমে পর্যাপ্ত স্পেস দেওয়া হলো স্ক্রোলের সুবিধার্থে */
             position: relative;
-            overflow-y: visible; /* ওভারফ্লো বাটন স্ক্রোল করার জন্য */
         }
 
-        /* Responsive TV Player Wrapper with Premium Neon Glow & Size Fix */
+        /* 🛠️ কন্ট্রোল ওভারলে প্যানেল ফিক্স (ভিডিওর সাউন্ড বাটন ঢেকে দেওয়া বন্ধ করতে এটি এখন ভিডিওর ওপরে থাকবে) */
+        .player-top-overlay {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+        }
+
+        /* Responsive TV Player Wrapper with Premium Neon Glow */
         .player-section {
             background: #000;
             border-radius: 20px;
             overflow: hidden;
             width: 100%;
             aspect-ratio: 16/9;
-            max-height: 70vh; /* বড় স্ক্রিন ও হাই ডিপিআই তে প্লেয়ারকে স্ক্রিনের মধ্যে ধরে রাখার ফিক্স */
             position: relative;
             border: 1px solid rgba(255, 31, 68, 0.2);
             box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 
@@ -232,7 +241,6 @@
             100% { border-color: rgba(255, 31, 68, 0.45); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 31, 68, 0.15); }
         }
         
-        /* Video.js প্লেয়ার যেন কন্টেইনারের বাইরে না যায় */
         .video-js {
             width: 100% !important;
             height: 100% !important;
@@ -240,25 +248,7 @@
             z-index: 1;
         }
 
-        /* কন্ট্রোলবার ওভারফ্লো প্রোটেকশন */
-        .video-js .vjs-control-bar {
-            z-index: 5 !important;
-            background-color: rgba(4, 6, 15, 0.85) !important;
-        }
-
-        .player-top-overlay {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            z-index: 10;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            pointer-events: none;
-        }
-
+        /* ── 📺 VIDEO RUNNING TEXT (MARQUEE) ── */
         .player-ticker {
             background: rgba(8, 12, 22, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -271,7 +261,6 @@
             overflow: hidden;
             flex: 1;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-            pointer-events: auto;
         }
         .ticker-badge {
             background: #ff1f44;
@@ -314,10 +303,10 @@
             100% { transform: translate3d(-100%, 0, 0); }
         }
 
+        /* ── 🔀 BUTTONS CONTROLLER GROUP ── */
         .server-and-actions {
             display: flex;
             gap: 10px;
-            pointer-events: auto;
             align-items: center;
         }
 
@@ -394,6 +383,7 @@
             box-shadow: 0 4px 15px rgba(255, 31, 68, 0.4);
         }
 
+        /* ── TV CHANNEL METADATA ── */
         .channel-details {
             margin-top: 30px;
             background: rgba(11, 17, 32, 0.4);
@@ -462,6 +452,7 @@
             box-shadow: 0 0 8px #10b981;
         }
 
+        /* ── LIVE TV TICKER (BOTTOM NEWS BAR) ── */
         .ticker-wrap {
             position: fixed;
             bottom: 0;
@@ -506,12 +497,14 @@
             100% { transform: translate3d(-100%, 0, 0); }
         }
 
+        /* ── FORCED FULL SCREEN TV MODE ── */
         body.forced-fullscreen {
             overflow: hidden !important;
         }
         body.forced-fullscreen .ott-header, 
         body.forced-fullscreen .channel-details,
-        body.forced-fullscreen .ticker-wrap {
+        body.forced-fullscreen .ticker-wrap,
+        body.forced-fullscreen .player-top-overlay {
             display: none !important;
         }
         body.forced-fullscreen .main-layout {
@@ -528,16 +521,9 @@
             border: none !important;
             z-index: 99999 !important;
             animation: none !important;
-            max-height: 100vh !important;
-        }
-        body.forced-fullscreen .player-top-overlay {
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            right: 15px;
-            z-index: 100000;
         }
 
+        /* Video.js Big Play Button Custom Design */
         .vjs-big-play-centered .vjs-big-play-button {
             background: linear-gradient(135deg, #ff1f44 0%, #cc0026 100%) !important;
             border: none !important;
@@ -550,25 +536,11 @@
             box-shadow: 0 0 25px rgba(255, 31, 68, 0.6) !important;
         }
 
-        /* ── 📺 HIGH DPI, TV & RESPONSIVE LAYOUT EXTRA FIXES ── */
-        @media screen and (min-width: 1200px) {
-            .main-layout {
-                max-width: 1280px; 
-            }
-            .player-section {
-                aspect-ratio: 16/9;
-                max-height: 65vh; 
-                width: 100% !important;
-            }
-        }
-
-        @media (max-width: 990px) {
+        /* ── 📱 MOBILE & TV ULTRA-RESPONSIVE RE-FIX ── */
+        @media (max-width: 950px) {
             .player-top-overlay {
                 flex-direction: column;
                 align-items: flex-end;
-                top: 12px;
-                left: 12px;
-                right: 12px;
                 gap: 10px;
             }
             .player-ticker {
@@ -658,6 +630,43 @@
 
     <main class="main-layout">
         
+        <div class="player-top-overlay">
+            <div class="player-ticker">
+                <div class="ticker-badge">NOTICE</div>
+                <div class="ticker-text-container">
+                    <div class="player-marquee">
+                        <span class="marquee-item">🎉 Welcome to MH Live Sports! Enjoy uninterrupted Ultra HD streaming experience.</span>
+                        <span class="marquee-item">⚠️ খেলা দেখতে কোনো সমস্যা হলে অন্য সার্ভার গুলো দিয়ে দেখেন।</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="server-and-actions">
+                <div class="server-controller">
+                    <button class="server-btn active-server" id="srv1" onclick="switchServer(1)">S1</button>
+                    <button class="server-btn" id="srv2" onclick="switchServer(2)">S2</button>
+                    <button class="server-btn" id="srv3" onclick="switchServer(3)">S3</button>
+                    <button class="server-btn" id="srv4" onclick="switchServer(4)">S4</button>
+                </div>
+
+                <div class="player-overlay-actions">
+                    <button class="tv-action-btn" id="rotateBtn" onclick="toggleScreenRotation()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                        </svg>
+                        <span id="rotateBtnText">Rotate</span>
+                    </button>
+
+                    <button class="tv-action-btn cinema-trigger" id="customFSBtn" onclick="toggleForcedFullscreen()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                        </svg>
+                        <span id="fsBtnText">Cinema</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <section class="player-section">
             <video 
                 id="mh-vjs-player" 
@@ -669,45 +678,6 @@
                 playsinline
                 webkit-playsinline>
             </video>
-
-            <div class="player-top-overlay">
-                
-                <div class="player-ticker">
-                    <div class="ticker-badge">NOTICE</div>
-                    <div class="ticker-text-container">
-                        <div class="player-marquee">
-                            <span class="marquee-item">⚠️ খেলা দেখতে কোনো সমস্যা হলে অন্য সার্ভার গুলো দিয়ে দেখেন।</span>
-                            <span class="marquee-item">🎉 Welcome to MH Live Sports! Enjoy uninterrupted Ultra HD streaming experience.</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="server-and-actions">
-                    <div class="server-controller">
-                        <button class="server-btn active-server" id="srv1" onclick="switchServer(1)">S1</button>
-                        <button class="server-btn" id="srv2" onclick="switchServer(2)">S2</button>
-                        <button class="server-btn" id="srv3" onclick="switchServer(3)">S3</button>
-                        <button class="server-btn" id="srv4" onclick="switchServer(4)">S4</button>
-                    </div>
-
-                    <div class="player-overlay-actions">
-                        <button class="tv-action-btn" id="rotateBtn" onclick="toggleScreenRotation()">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
-                            </svg>
-                            <span id="rotateBtnText">Rotate</span>
-                        </button>
-
-                        <button class="tv-action-btn cinema-trigger" id="customFSBtn" onclick="toggleForcedFullscreen()">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
-                            </svg>
-                            <span id="fsBtnText">Cinema</span>
-                        </button>
-                    </div>
-                </div>
-
-            </div>
         </section>
 
         <section class="channel-details">
@@ -726,9 +696,9 @@
     <div class="ticker-wrap">
         <div class="ticker-title">MH BROADCAST</div>
         <div class="ticker">
-            <div class="ticker-item">📢 খেলা দেখতে কোনো সমস্যা হলে অন্য সার্ভার গুলো দিয়ে দেখেন।</div>
             <div class="ticker-item">⚡ Welcome to the all-new premium TV application update!</div>
             <div class="ticker-item">⚽ High definition uninterrupted buffering-free live stream is now broadcasted.</div>
+            <div class="ticker-item">🎬 Use the floating 'Rotate' and 'Cinema' buttons right on top of the player for a quick theater layout switch!</div>
         </div>
     </div>
 
@@ -756,14 +726,9 @@
         document.addEventListener("DOMContentLoaded", () => {
             player = videojs('mh-vjs-player', {
                 responsive: true,
-                fluid: false,
-                liveui: true,
+                fluid: false, 
                 html5: {
-                    vhs: { 
-                        overrideNative: true,
-                        maxBufferLength: 30,
-                        backBufferLength: 15
-                    }
+                    vhs: { overrideNative: true }
                 },
                 controlBar: {
                     pictureInPictureToggle: false,
