@@ -38,6 +38,7 @@
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
+            overflow-y: auto; /* বডিতে স্ক্রোলার সচল রাখার জন্য */
             transition: transform 0.4s ease;
         }
 
@@ -201,24 +202,25 @@
             transform: scale(1.05);
         }
 
+        /* ── MAIN CONTENT CONTAINER (WITH SMOOTH SCROLL) ── */
         .main-layout {
             flex: 1;
             max-width: 1100px;
             width: 100%;
             margin: 0 auto;
-            padding: 0 20px 60px 20px;
+            padding: 0 20px 80px 20px; /* নিচের মার্জিন বাড়ানো হয়েছে সেফটির জন্য */
             position: relative;
-            display: flex;
-            flex-direction: column;
+            overflow-y: visible; /* ওভারফ্লো বাটন স্ক্রোল করার জন্য */
         }
 
-        /* ── 🖥️ PLAYER CONTAINER SECTION ── */
+        /* Responsive TV Player Wrapper with Premium Neon Glow & Size Fix */
         .player-section {
             background: #000;
             border-radius: 20px;
             overflow: hidden;
             width: 100%;
             aspect-ratio: 16/9;
+            max-height: 70vh; /* বড় স্ক্রিন ও হাই ডিপিআই তে প্লেয়ারকে স্ক্রিনের মধ্যে ধরে রাখার ফিক্স */
             position: relative;
             border: 1px solid rgba(255, 31, 68, 0.2);
             box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 
@@ -229,10 +231,19 @@
             0% { border-color: rgba(255, 31, 68, 0.2); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 31, 68, 0.05); }
             100% { border-color: rgba(255, 31, 68, 0.45); box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 31, 68, 0.15); }
         }
+        
+        /* Video.js প্লেয়ার যেন কন্টেইনারের বাইরে না যায় */
         .video-js {
             width: 100% !important;
             height: 100% !important;
             display: block;
+            z-index: 1;
+        }
+
+        /* কন্ট্রোলবার ওভারফ্লো প্রোটেকশন */
+        .video-js .vjs-control-bar {
+            z-index: 5 !important;
+            background-color: rgba(4, 6, 15, 0.85) !important;
         }
 
         .player-top-overlay {
@@ -307,7 +318,6 @@
             display: flex;
             gap: 10px;
             pointer-events: auto;
-            flex-wrap: nowrap;
             align-items: center;
         }
 
@@ -518,6 +528,7 @@
             border: none !important;
             z-index: 99999 !important;
             animation: none !important;
+            max-height: 100vh !important;
         }
         body.forced-fullscreen .player-top-overlay {
             position: fixed;
@@ -539,7 +550,7 @@
             box-shadow: 0 0 25px rgba(255, 31, 68, 0.6) !important;
         }
 
-        /* ── 📺 ANDROID TV / SMART TV & LARGE SCREEN OPTIMIZATION ── */
+        /* ── 📺 HIGH DPI, TV & RESPONSIVE LAYOUT EXTRA FIXES ── */
         @media screen and (min-width: 1200px) {
             .main-layout {
                 max-width: 1280px; 
@@ -548,12 +559,6 @@
                 aspect-ratio: 16/9;
                 max-height: 65vh; 
                 width: 100% !important;
-                clear: both;
-                display: block;
-            }
-            .channel-details {
-                margin-top: 25px;
-                clear: both;
             }
         }
 
