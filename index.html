@@ -8,18 +8,7 @@
     <meta name="google-site-verification" content="google445e064c3e6b735a" />
 
     <title>MH Live Sports - রাফি ভাইয়ের খেলার অ্যাপস | লাইভ খেলা দেখার ওয়েবসাইট</title>
-    <meta name="description" content="MH Live Sports এ দেখুন ফুটবল, cricketসহ সমস্ত লাইভ খেলা একদম ফ্রিতে। রাফি ভাইয়ের খেলার অ্যাপস ও ওয়েবসাইটে উপভোগ করুন FIFA World Cup 2026, Brazil Vs Argentina ম্যাচসহ Ultra HD লাইভ স্ট্রিমিং।">
-    <meta name="keywords" content="MH Live Sports, রাফি ভাইয়ের খেলার অ্যাপস, রাফি ভাই, রাফি ভাই কে, fifa world cup 2026, Brazil Vs Argentina, live khela, লাইভ খেলা দেখার ওয়েবসাইট, ফুটবল খেলা, T Sports Live, Live Football BD, MH Stream, রাফি ভাইয়ের লাইভ টিভি, আজ কার খেলা">
-    <meta name="author" content="MH RAFI">
-    <meta name="robots" content="index, follow">
-
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="MH Live Sports - রাফি ভাইয়ের খেলার অ্যাপস">
-    <meta property="og:description" content="ফিফা ওয়ার্ল্ড কাপ ২০২৬ ও ব্রাজিল বনাম আর্জেন্টিনার হাই-ভোল্টেজ ম্যাচসহ সব খেলা সরাসরি দেখতে ভিজিট করুন লাইভ খেলা দেখার সেরা ওয়েবসাইট MH Live Sports-এ।">
-    <meta property="og:image" content="https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/5db0c6a0-5095-42cb-b9db-176c1976c705.jpg">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="MH Live Sports - রাফি ভাইয়ের খেলার অ্যাপস">
-    <meta name="twitter:description" content="সব ধরণের ফুটবল ও ক্রিকেট খেলা লাইভ উপভোগ করুন রাফি ভাইয়ের নিজস্ব স্ট্রিমিং প্ল্যাটফর্মে।">
+    <meta name="description" content="MH Live Sports এ দেখুন ফুটবল, cricketসহ সমস্ত লাইভ খেলা একদম ফ্রিতে।">
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://vjs.zencdn.net/8.3.0/video-js.css" rel="stylesheet" />
@@ -165,10 +154,37 @@
         .marquee-item { font-size: 12px; color: #fff; font-weight: 600; padding-right: 50px; }
         @keyframes playerMarquee { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
-        .server-and-actions { display: flex; gap: 10px; align-items: center; }
-        .server-controller { display: flex; background: rgba(8, 12, 22, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); padding: 4px; border-radius: 10px; gap: 4px; }
-        .server-btn { background: transparent; border: none; color: #94a3b8; font-size: 12px; font-weight: 700; padding: 0 14px; height: 34px; border-radius: 7px; cursor: pointer; }
+        /* সার্ভার ও অ্যাকশন বাটন কন্ট্রোলার */
+        .server-and-actions { 
+            display: flex; 
+            gap: 10px; 
+            align-items: center; 
+        }
+        .server-controller { 
+            display: flex; 
+            background: rgba(8, 12, 22, 0.8); 
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            padding: 4px; 
+            border-radius: 10px; 
+            gap: 4px; 
+        }
+        .server-btn { 
+            background: transparent; 
+            border: none; 
+            color: #94a3b8; 
+            font-size: 12px; 
+            font-weight: 700; 
+            padding: 0 14px; 
+            height: 34px; 
+            border-radius: 7px; 
+            cursor: pointer; 
+        }
         .server-btn.active-server { background: #ff1f44; color: #fff; }
+
+        .player-overlay-actions {
+            display: flex;
+            gap: 10px;
+        }
 
         .tv-action-btn {
             background: rgba(8, 12, 22, 0.8);
@@ -186,7 +202,7 @@
         }
         .tv-action-btn.active-state { background: #ff1f44; border-color: transparent; }
 
-        /* ── 📺 VIDEO PLAYER CONTAINER FIXED ── */
+        /* ── 📺 VIDEO PLAYER CONTAINER ── */
         .player-section {
             background: #000000 !important;
             border-radius: 20px;
@@ -212,6 +228,16 @@
             height: 100% !important;
             display: block !important;
             object-fit: contain !important;
+        }
+
+        /* ── FULL SCREEN MODE CONTROL CONTAINER ── */
+        /* ফুল স্ক্রিন মোড অন হলে সার্ভার ও রোটেট বাটন একসাথে নিচে ধরে রাখার জন্য স্পেশাল হোল্ডার */
+        #fullscreen-controls-holder {
+            display: none;
+            width: 100%;
+            justify-content: center;
+            margin-top: 20px;
+            z-index: 100000;
         }
 
         /* ── CHANNEL INFO METADATA ── */
@@ -248,46 +274,41 @@
         .ticker-item { padding: 0 2.5rem; font-size: 13px; color: #cbd5e1; }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
-        /* ── 🎬 CINEMA MODE ULTRA TV FIX (বাটন হাইড হবে না, সাইজ পারফেক্ট থাকবে) ── */
+        /* ── 🛠️ PERFECT FULLSCREEN TV MODE FIX ── */
+        body.forced-fullscreen {
+            overflow: hidden !important;
+        }
         body.forced-fullscreen .ott-header, 
         body.forced-fullscreen .channel-details,
         body.forced-fullscreen .ticker-wrap,
-        body.forced-fullscreen .player-top-overlay .player-ticker { 
+        body.forced-fullscreen .player-top-overlay { 
             display: none !important; 
         }
-        
         body.forced-fullscreen .main-layout { 
             padding: 0 !important; 
             max-width: 100vw !important; 
-            width: 100vw !important; 
+            width: 100vw !important;
             height: 100vh !important;
-            justify-content: flex-start;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important; 
+            align-items: center !important;
+            background-color: #000000 !important;
         }
-        
         body.forced-fullscreen .player-section { 
+            width: 100vw !important; 
+            max-width: 100vw !important;
+            height: auto !important;
+            aspect-ratio: 16/9 !important;
             border-radius: 0 !important; 
             border: none !important; 
-            width: 100vw !important;
-            height: 75vh !important; /* স্ক্রিনের বড় অংশ জুড়ে শুধু ভিডিও থাকবে */
-            aspect-ratio: auto !important;
+            box-shadow: none !important;
+        }
+        /* ফুল স্ক্রিনে বাটন হোল্ডারটি নিখুঁতভাবে নিচে ভেসে থাকবে */
+        body.forced-fullscreen #fullscreen-controls-holder {
+            display: flex !important;
         }
 
-        body.forced-fullscreen .player-top-overlay {
-            margin-top: 15px;
-            margin-bottom: 0;
-            padding: 0 20px;
-            width: 100vw !important;
-            justify-content: center !important; /* বাটনগুলো স্ক্রিনের মাঝে নিয়ে আসবে */
-        }
-        body.forced-fullscreen .server-and-actions {
-            background: rgba(4, 6, 15, 0.95);
-            padding: 10px 20px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-        }
-
-        /* Big Play Button Overlay Styling */
         .vjs-big-play-centered .vjs-big-play-button {
             background: linear-gradient(135deg, #ff1f44 0%, #cc0026 100%) !important;
             border: none !important;
@@ -295,15 +316,9 @@
             width: 70px; height: 70px; line-height: 70px; margin-top: -35px; margin-left: -35px;
         }
 
-        /* Responsive Breakpoints */
         @media (max-width: 950px) {
             .player-top-overlay { flex-direction: column; align-items: flex-end; gap: 10px; }
             .server-and-actions { width: 100%; justify-content: flex-end; flex-wrap: wrap; }
-            body.forced-fullscreen .player-top-overlay { flex-direction: row; }
-        }
-        @media (max-width: 480px) {
-            .ott-header { padding: 15px 20px; }
-            .channel-details { padding: 15px; flex-direction: column; gap: 15px; }
         }
     </style>
 </head>
@@ -326,7 +341,7 @@
 
     <main class="main-layout">
         
-        <div class="player-top-overlay">
+        <div class="player-top-overlay" id="normal-controls">
             <div class="player-ticker">
                 <div class="ticker-badge">NOTICE</div>
                 <div class="ticker-text-container">
@@ -339,15 +354,15 @@
 
             <div class="server-and-actions">
                 <div class="server-controller">
-                    <button class="server-btn active-server" id="srv1" onclick="switchServer(1)">S1</button>
-                    <button class="server-btn" id="srv2" onclick="switchServer(2)">S2</button>
-                    <button class="server-btn" id="srv3" onclick="switchServer(3)">S3</button>
-                    <button class="server-btn" id="srv4" onclick="switchServer(4)">S4</button>
+                    <button class="server-btn active-server" onclick="switchServer(1)">S1</button>
+                    <button class="server-btn" onclick="switchServer(2)">S2</button>
+                    <button class="server-btn" onclick="switchServer(3)">S3</button>
+                    <button class="server-btn" onclick="switchServer(4)">S4</button>
                 </div>
 
                 <div class="player-overlay-actions">
-                    <button class="tv-action-btn" id="rotateBtn" onclick="toggleScreenRotation()">Rotate</button>
-                    <button class="tv-action-btn" id="customFSBtn" onclick="toggleForcedFullscreen()">Cinema</button>
+                    <button class="tv-action-btn" onclick="toggleScreenRotation()">Rotate</button>
+                    <button class="tv-action-btn" onclick="toggleForcedFullscreen()">Full Screen</button>
                 </div>
             </div>
         </div>
@@ -363,6 +378,21 @@
                 playsinline>
             </video>
         </section>
+
+        <div id="fullscreen-controls-holder">
+            <div class="server-and-actions" style="background: rgba(8,12,22,0.9); padding: 12px 20px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <div class="server-controller">
+                    <button class="server-btn active-server" onclick="switchServer(1)">S1</button>
+                    <button class="server-btn" onclick="switchServer(2)">S2</button>
+                    <button class="server-btn" onclick="switchServer(3)">S3</button>
+                    <button class="server-btn" onclick="switchServer(4)">S4</button>
+                </div>
+                <div class="player-overlay-actions">
+                    <button class="tv-action-btn" onclick="toggleScreenRotation()">Rotate</button>
+                    <button class="tv-action-btn active-state" style="background: #ff1f44;" onclick="toggleForcedFullscreen()">Exit Full Screen</button>
+                </div>
+            </div>
+        </div>
 
         <section class="channel-details">
             <div class="channel-info">
@@ -386,7 +416,6 @@
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
 
     <script>
-        // তোমার অরিজিনাল ৪টি লাইভ সার্ভার লিঙ্ক
         const servers = {
             1: 'https://1nyaler.streamhostingcdn.top/stream/32/index.m3u8',
             2: 'https://1nyaler.streamhostingcdn.top/stream/23/index.m3u8',
@@ -414,9 +443,7 @@
                 controls: true,
                 autoplay: true,
                 muted: true,
-                html5: {
-                    vhs: { overrideNative: true }
-                }
+                html5: { vhs: { overrideNative: true } }
             });
 
             player.ready(() => {
@@ -434,13 +461,21 @@
             });
         }
 
+        // সার্ভার সুইচিং ফাংশন (নরমাল ও ফুল স্ক্রিন উভয় বাটন প্যানেলকেই একসাথে সিঙ্ক রাখবে)
         function switchServer(serverNum) {
-            if (serverNum === currentPlayerServer) return;
             currentPlayerServer = serverNum;
             
-            for (let i = 1; i <= 4; i++) {
-                document.getElementById('srv' + i).classList.toggle('active-server', i === serverNum);
-            }
+            const allServerButtons = document.querySelectorAll('.server-btn');
+            allServerButtons.forEach(btn => {
+                btn.classList.remove('active-server');
+            });
+
+            const normalSet = document.getElementById('normal-controls').querySelectorAll('.server-btn');
+            const fullscreenSet = document.getElementById('fullscreen-controls-holder').querySelectorAll('.server-btn');
+            
+            if(normalSet[serverNum - 1]) normalSet[serverNum - 1].classList.add('active-server');
+            if(fullscreenSet[serverNum - 1]) fullscreenSet[serverNum - 1].classList.add('active-server');
+            
             loadStream(servers[serverNum]);
         }
 
@@ -451,13 +486,7 @@
 
         function toggleForcedFullscreen() {
             document.body.classList.toggle('forced-fullscreen');
-            
-            // সিনেমা মোড ট্রিপল বুস্ট ট্র্যাকিং রিসাইজ (টিভি ব্রাউজারের জন্য সবচেয়ে গুরুত্বপূর্ণ)
-            if(player) { 
-                setTimeout(() => { player.handleResize(); }, 100); 
-                setTimeout(() => { player.handleResize(); }, 300); 
-                setTimeout(() => { player.handleResize(); }, 600); 
-            }
+            if(player) { setTimeout(() => { player.handleResize(); }, 300); }
         }
     </script>
 </body>
