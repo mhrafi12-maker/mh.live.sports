@@ -12,10 +12,11 @@
     <meta name="keywords" content="MH Live Sports, রাফি ভাইয়ের খেলার অ্যাপস, রাফি ভাই,T Sports Live, Live Football BD, MH Stream,আজ কার খেলা, live sports streaming, free football streaming">
     <meta name="author" content="MH RAFI">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://mh-live-sports.vercel.app/" /> <meta property="og:type" content="video.other">
+    <link rel="canonical" href="https://mh-live-sports.vercel.app/" /> 
+    <meta property="og:type" content="video.other">
     <meta property="og:site_name" content="MH Live Sports">
     <meta property="og:title" content="MH Live Sports - রাফি ভাইয়ের খেলার অ্যাপস | ">
-    <meta property="og:description" content="সব ধরণের ফুটবল ও ক্রিকেট খেলা লাইভ উপভোগ করুন সম্পূর্ণ ফ্রিতে রাফি ভাইয়ের নিজস্ব স্ট্রিমিং প্ল্যাটফর্মে।">
+    <meta property="og:description" content="সব ধরণের ফুটবল ও ক্রিকেট খেলা লাইভ উপভোগ করুন সম্পূর্ণ ফ্রিতে রাফি ভাইয়ের নিজস্ব স্ট্রিমিং প্ল্যাটфর্মে।">
     <meta property="og:image" content="https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/5db0c6a0-5095-42cb-b9db-176c1976c705.jpg">
     <meta property="og:url" content="https://mhlivesports.com/">
 
@@ -227,7 +228,7 @@
         }
         .tv-action-btn.active-state { background: #ff1f44; border-color: transparent; }
 
-        /* ── 📺 VIDEO PLAYER CONTAINER ── */
+        /* ── 📺 DUAL PLAYER CONTAINER ── */
         .player-section {
             background: #000000 !important;
             border-radius: 20px;
@@ -255,6 +256,23 @@
             object-fit: contain !important;
         }
 
+        /* কাস্টম আইফ্রেম স্টাইল যা সার্ভার ৪ সিলেক্ট করলে সচল হবে */
+        .mh-iframe-wrapper {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #000;
+            z-index: 10;
+        }
+        .mh-iframe-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
         /* ── FULL SCREEN MODE CONTROL CONTAINER ── */
         #fullscreen-controls-holder {
             display: none;
@@ -275,7 +293,7 @@
             justify-content: space-between;
             align-items: flex-start;
         }
-        .channel-info h1 { font-size: 24px; font-weight: 600; display: flex; align-items: center; gap: 14px; color: #fff; } /* SEO এর জন্য h2 কে h1 করা হয়েছে */
+        .channel-info h1 { font-size: 24px; font-weight: 600; display: flex; align-items: center; gap: 14px; color: #fff; }
         .live-badge { background: #ff1f44; font-size: 11px; padding: 3px 10px; border-radius: 6px; color: #fff; }
         .channel-info p { font-size: 13px; color: #94a3b8; margin-top: 5px; }
         .status-tag { background: rgba(255, 255, 255, 0.05); padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; }
@@ -399,6 +417,15 @@
                 muted
                 playsinline>
             </video>
+
+            <div id="mh-iframe-container" class="mh-iframe-wrapper">
+                <iframe 
+                    id="mh-special-frame"
+                    src="" 
+                    allow="autoplay; fullscreen; encrypted-media; picture-in-picture" 
+                    allowfullscreen>
+                </iframe>
+            </div>
         </section>
 
         <div id="fullscreen-controls-holder">
@@ -437,11 +464,12 @@
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
 
     <script>
+        // সার্ভার ১, ২, ৩ এ থাকবে ডাইরেক্ট সোর্স লিংক এবং ৪ নাম্বারে তোমার স্পেশাল ফিফা লিংক
         const servers = {
             1: 'https://1nyaler.streamhostingcdn.top/stream/32/index.m3u8',
             2: 'https://1nyaler.streamhostingcdn.top/stream/23/index.m3u8',
             3: 'https://1nyaler.streamhostingcdn.top/stream/106/index.m3u8',
-            4: https://fifalive.click/play'
+            4: 'https://fifalive.click/play' // তোমার বিশেষ লিংকটি সার্ভার ৪ এ সেট করা হলো
         };
         
         let currentPlayerServer = 1;
@@ -468,18 +496,33 @@
             });
 
             player.ready(() => {
-                loadStream(servers[currentPlayerServer]);
+                loadStream(currentPlayerServer);
             });
         });
 
-        function loadStream(url) {
-            if (!player) return;
-            player.src({ src: url, type: 'application/x-mpegURL' });
-            player.load();
-            player.play().catch(function(error) {
-                player.muted(true);
-                player.play();
-            });
+        function loadStream(serverNum) {
+            const iframeContainer = document.getElementById('mh-iframe-container');
+            const specialFrame = document.getElementById('mh-special-frame');
+
+            if (serverNum === 4) {
+                // সার্ভার ৪ হলে সাধারণ প্লেয়ার পজ করে আইফ্রেম অন হবে
+                if (player) { player.pause(); }
+                iframeContainer.style.display = 'block';
+                specialFrame.src = servers[4];
+            } else {
+                // অন্য সার্ভার হলে আইফ্রেম বন্ধ হয়ে সাধারণ প্লেয়ারে স্ট্রিমিং লোড হবে
+                iframeContainer.style.display = 'none';
+                specialFrame.src = '';
+                
+                if (player) {
+                    player.src({ src: servers[serverNum], type: 'application/x-mpegURL' });
+                    player.load();
+                    player.play().catch(function(error) {
+                        player.muted(true);
+                        player.play();
+                    });
+                }
+            }
         }
 
         function switchServer(serverNum) {
@@ -496,7 +539,7 @@
             if(normalSet[serverNum - 1]) normalSet[serverNum - 1].classList.add('active-server');
             if(fullscreenSet[serverNum - 1]) fullscreenSet[serverNum - 1].classList.add('active-server');
             
-            loadStream(servers[serverNum]);
+            loadStream(serverNum);
         }
 
         function toggleForcedFullscreen() {
