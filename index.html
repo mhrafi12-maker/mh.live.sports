@@ -31,12 +31,27 @@
     <meta name="twitter:description" content="ফিফা ওয়ার্ল্ড কাপ ও ভাই-ভোল্টেজ ম্যাচসহ সব খেলা সরাসরি দেখতে ভিজিট করুন MH Live Sports।">
     <meta name="twitter:image" content="https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/b26c4adf-b100-44a3-ba44-87af2e2ef552.png">
     
+    <!-- ── 🔔 ONE SIGNAL CHROME PUSH NOTIFICATION ── -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "7d3694c5-0de9-4fd0-9cc1-ac1d9e0d4e40",
+          safari_web_id: "optional_safari_id",
+          notifyButton: {
+            enable: true, 
+          },
+        });
+      });
+    </script>
+    
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "SportsEvent",
       "name": "MH Live Sports Streaming & Football Schedule",
-      "description": "MH Live Sports এ দেখুন ফুটবল, ক্রিকেটসহ সমস্ত লাইভ খেলা এবং প্রতিদিনের ৪৩টি ম্যাচের ফিক্সচার সূচি একদম ফ্রিতে।",
+      "description": "MH Live Sports এ দেখুন ফুটবল, cricketসহ সমস্ত লাইভ খেলা এবং প্রতিদিনের ৪৩টি ম্যাচের ফিক্সচার সূচি একদম ফ্রিতে।",
       "image": "https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/b26c4adf-b100-44a3-ba44-87af2e2ef552.png",
       "url": "https://mh-live-sports.vercel.app/",
       "organizer": {
@@ -176,6 +191,7 @@
         .channel-info h1 { font-size: 24px; font-weight: 600; display: flex; align-items: center; gap: 14px; color: #fff; }
         .live-badge { background: #ff1f44; font-size: 11px; padding: 3px 10px; border-radius: 6px; color: #fff; animation: pulseGlow 1.5s infinite; }
         .channel-info p { font-size: 13px; color: #94a3b8; margin-top: 5px; }
+        .channel-status-tags { display: flex; gap: 10px; }
         .status-tag { background: rgba(255, 255, 255, 0.05); padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; }
 
         /* ── 📊 SEO & POLICY ACCORDIONS ── */
@@ -409,7 +425,6 @@
         let player;
         let currentTab = 'all';
 
-        // ৪৩টি ম্যাচের সাথে আরও অতিরিক্ত ম্যাচ (৪৪ থেকে ৭২) যুক্ত করা হলো
         const MATCH_DATA = [
             { id: 1, date: '2026-06-12', time: '01:00 AM', team1: 'Mexico', flag1: '🇲🇽', team2: 'South Africa', flag2: '🇿🇦', group: 'A' },
             { id: 2, date: '2026-06-12', time: '08:00 AM', team1: 'Korea Republic', flag1: '🇰🇷', team2: 'Czechia', flag2: '🇨🇿', group: 'A' },
@@ -447,7 +462,7 @@
             { id: 34, date: '2026-06-21', time: '02:00 AM', team1: 'Germany', flag1: '🇩🇪', team2: 'Ivory Coast', flag2: '🇨🇮', group: 'E' },
             { id: 35, date: '2026-06-21', time: '06:00 AM', team1: 'Ecuador', flag1: '🇪🇨', team2: 'Curaçao', flag2: '🇨🇼', group: 'E' },
             { id: 36, date: '2026-06-21', time: '10:00 AM', team1: 'Tunisia', flag1: '🇹🇳', team2: 'Japan', flag2: '🇯🇵', group: 'F' },
-            { id: 37, date: '2026-06-21', time: '10:00 PM', team1: 'Spain', flag1: '🇪🇸', team2: 'Saudi Arabia', flag2: '🇸🇦', group: 'H' },
+            { id: 37, date: '2026-06-21', time: '10:00 PM', team1: 'Spain', flag1: '🇪🇸', text2: 'Saudi Arabia', flag2: '🇸🇦', group: 'H' },
             { id: 38, date: '2026-06-22', time: '01:00 AM', team1: 'Belgium', flag1: '🇧🇪', team2: 'Iran', flag2: '🇮🇷', group: 'G' },
             { id: 39, date: '2026-06-22', time: '04:00 AM', team1: 'Uruguay', flag1: '🇺🇾', team2: 'Cabo Verde', flag2: '🇨🇻', group: 'H' },
             { id: 40, date: '2026-06-22', time: '07:00 AM', team1: 'New Zealand', flag1: '🇳🇿', team2: 'Egypt', flag2: '🇪🇬', group: 'G' },
@@ -485,7 +500,6 @@
             { id: 72, date: '2026-06-28', time: '08:00 AM', team1: 'Jordan', flag1: '🇯🇴', team2: 'Argentina', flag2: '🇦🇷', group: 'J' }
         ];
 
-        // Dismiss Splash Screen Smoothly
         window.addEventListener("load", () => {
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
@@ -564,7 +578,6 @@
             }
         }
 
-        // ── 📅 TIME DASHBOARD SYSTEM MULTI-FILTER ──
         function parseDateTime(dateStr, timeStr) {
             let [timePart, ampm] = timeStr.split(' ');
             let [hours, minutes] = timePart.split(':').map(Number);
