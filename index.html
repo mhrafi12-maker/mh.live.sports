@@ -7,7 +7,7 @@
     <meta name="google-site-verification" content="4YhRDt5orcyd0D7nIem7u8ZeDK7fQ9C8d93G04uDoLY" />
     <meta name="google-site-verification" content="google445e064c3e6b735a" />
 
-    <title>MH Live Sports - রাফি ভাইয়ের খেলার অ্যাপস|</title>
+    <title>MH Live Sports - রাফি ভাইয়ের খেলার অ্যাপস</title>
     <meta name="description" content="MH Live Sports এ দেখুন ফুটবল খেলা একদম ফ্রিতে। রাফি ভাইয়ের খেলার অ্যাপস এ উপভোগ করুন FIFA World Cup, Brazil Vs Argentina ম্যাচসহ Ultra HD লাইভ স্ট্রিমিং।">
     <meta name="keywords" content="MH Live Sports, রাফি ভাইয়ের খেলার অ্যাপস, রাফি ভাই, T Sports Live, Live Football BD, MH Stream, আজ কার খেলা, live sports streaming, free football streaming, খেলার সময়সূচী, live football watch, FIFA World Cup Live">
     <meta name="author" content="MH RAFI">
@@ -116,12 +116,12 @@
             flex-direction: column;
         }
 
-        /* ── 📌 PREMIUM FULL-SIZE STICKY ENGINE (প্লেয়ার সাইজ আগের মতোই থাকবে) ── */
+        /* ── 📌 PREMIUM FULL-SIZE STICKY ENGINE ── */
         .sticky-player-container {
             position: sticky;
             top: 0;
-            z-index: 50; /* যাতে কন্টেন্ট প্লেয়ারের নিচ দিয়ে স্ক্রোল হয় */
-            background-color: #04060f; /* স্ক্রোলের সময় ব্যাকগ্রাউন্ড ধরে রাখতে */
+            z-index: 50;
+            background-color: #04060f;
             padding-top: 10px;
             padding-bottom: 15px;
             width: 100%;
@@ -358,7 +358,7 @@
 
             <section class="seo-section">
                 <div class="accordion-item">
-                    <button class="accordion-header" onclick="toggleAccordion(this)">কিভাবে লাইভ খেলা দেখবেন?</button>
+                    <button class="accordion-header" onclick="toggleAccordion(this)">কিভাবে লাইভ খেলা देखेंगे?</button>
                     <div class="accordion-content">
                         <div class="accordion-body">
                             <p>আমাদের ওয়েবসাইটে মূল প্লেয়ারে লাইভ স্ট্রিমিং স্বয়ংক্রিয়ভাবে চালু হয়ে যাবে। কোনো সমস্যা হলে প্লেয়ারের উপরে থাকা <strong>S1, S2, S3, বা S4</strong> সার্ভার বাটনগুলো পরিবর্তন করে চেষ্টা করুন। ফুল স্ক্রিনে দেখতে <strong>Full Screen</strong> বাটনটিতে ক্লিক করুন। নিচে সূচি স্ক্রোল করলে প্লেয়ারটি তার অরিজিনাল সাইজেই উপরে লক হয়ে থাকবে এবং বাকি সূচি নিচ দিয়ে অনায়াসে স্ক্রোল হবে।</p>
@@ -409,7 +409,7 @@
         let player;
         let currentTab = 'all';
 
-        // ৪৩টি ম্যাচের সম্পূর্ণ নির্ভুল ডেটাবেজ 
+        // ৪৩টি ম্যাচের সাথে আরও অতিরিক্ত ম্যাচ (৪৪ থেকে ৭২) যুক্ত করা হলো
         const MATCH_DATA = [
             { id: 1, date: '2026-06-12', time: '01:00 AM', team1: 'Mexico', flag1: '🇲🇽', team2: 'South Africa', flag2: '🇿🇦', group: 'A' },
             { id: 2, date: '2026-06-12', time: '08:00 AM', team1: 'Korea Republic', flag1: '🇰🇷', team2: 'Czechia', flag2: '🇨🇿', group: 'A' },
@@ -453,7 +453,36 @@
             { id: 40, date: '2026-06-22', time: '07:00 AM', team1: 'New Zealand', flag1: '🇳🇿', team2: 'Egypt', flag2: '🇪🇬', group: 'G' },
             { id: 41, date: '2026-06-22', time: '11:00 PM', team1: 'Argentina', flag1: '🇦🇷', team2: 'Austria', flag2: '🇦🇹', group: 'J' },
             { id: 42, date: '2026-06-23', time: '03:00 AM', team1: 'France', flag1: '🇫🇷', team2: 'Iraq', flag2: '🇮🇶', group: 'I' },
-            { id: 43, date: '2026-06-23', time: '06:00 AM', team1: 'Norway', flag1: '🇳🇴', team2: 'Senegal', flag2: '🇸🇳', group: 'I' }
+            { id: 43, date: '2026-06-23', time: '06:00 AM', team1: 'Norway', flag1: '🇳🇴', team2: 'Senegal', flag2: '🇸🇳', group: 'I' },
+            { id: 44, date: '2026-06-23', time: '09:00 AM', team1: 'Jordan', flag1: '🇯🇴', team2: 'Algeria', flag2: '🇩🇿', group: 'J' },
+            { id: 45, date: '2026-06-23', time: '11:00 PM', team1: 'Portugal', flag1: '🇵🇹', team2: 'Uzbekistan', flag2: '🇺🇿', group: 'K' },
+            { id: 46, date: '2026-06-24', time: '02:00 AM', team1: 'England', flag1: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', team2: 'Ghana', flag2: '🇬🇭', group: 'L' },
+            { id: 47, date: '2026-06-24', time: '05:00 AM', team1: 'Panama', flag1: '🇵🇦', team2: 'Croatia', flag2: '🇭🇷', group: 'L' },
+            { id: 48, date: '2026-06-24', time: '08:00 AM', team1: 'Colombia', flag1: '🇨🇴', team2: 'Congo', flag2: '🇨🇬', group: 'K' },
+            { id: 49, date: '2026-06-25', time: '01:00 AM', team1: 'Switzerland', flag1: '🇨🇭', team2: 'Canada', flag2: '🇨🇦', group: 'B' },
+            { id: 50, date: '2026-06-25', time: '01:00 AM', team1: 'Bosnia & Herzegovina', flag1: '🇧🇦', team2: 'Qatar', flag2: '🇶🇦', group: 'B' },
+            { id: 51, date: '2026-06-25', time: '04:00 AM', team1: 'Scotland', flag1: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', team2: 'Brazil', flag2: '🇧🇷', group: 'C' },
+            { id: 52, date: '2026-06-25', time: '04:00 AM', team1: 'Morocco', flag1: '🇲🇦', team2: 'Haiti', flag2: '🇲🇭', group: 'C' },
+            { id: 53, date: '2026-06-25', time: '07:00 AM', team1: 'Czechia', flag1: '🇨🇿', team2: 'Mexico', flag2: '🇲🇽', group: 'A' },
+            { id: 54, date: '2026-06-25', time: '07:00 AM', team1: 'South Africa', flag1: '🇿🇦', team2: 'Korea Republic', flag2: '🇰🇷', group: 'A' },
+            { id: 55, date: '2026-06-26', time: '02:00 AM', team1: 'Curaçao', flag1: '🇨🇼', team2: 'Ivory Coast', flag2: '🇨🇮', group: 'E' },
+            { id: 56, date: '2026-06-26', time: '02:00 AM', team1: 'Ecuador', flag1: '🇪🇨', team2: 'Germany', flag2: '🇩🇪', group: 'E' },
+            { id: 57, date: '2026-06-26', time: '05:00 AM', team1: 'Japan', flag1: '🇯🇵', team2: 'Sweden', flag2: '🇸🇪', group: 'F' },
+            { id: 58, date: '2026-06-26', time: '05:00 AM', team1: 'Tunisia', flag1: '🇹🇳', team2: 'Netherlands', flag2: '🇳🇱', group: 'F' },
+            { id: 59, date: '2026-06-26', time: '08:00 AM', team1: 'Türkiye', flag1: '🇹🇷', team2: 'USA', flag2: '🇺🇸', group: 'D' },
+            { id: 60, date: '2026-06-26', time: '08:00 AM', team1: 'Paraguay', flag1: '🇵🇾', team2: 'Australia', flag2: '🇦🇺', group: 'D' },
+            { id: 61, date: '2026-06-27', time: '01:00 AM', team1: 'Norway', flag1: '🇳🇴', team2: 'France', flag2: '🇫🇷', group: 'I' },
+            { id: 62, date: '2026-06-27', time: '01:00 AM', team1: 'Senegal', flag1: '🇸🇳', team2: 'Iraq', flag2: '🇮🇶', group: 'I' },
+            { id: 63, date: '2026-06-27', time: '06:00 AM', team1: 'Cabo Verde', flag1: '🇨🇻', team2: 'Saudi Arabia', flag2: '🇸🇦', group: 'H' },
+            { id: 64, date: '2026-06-27', time: '06:00 AM', team1: 'Uruguay', flag1: '🇺🇾', team2: 'Spain', flag2: '🇪🇸', group: 'H' },
+            { id: 65, date: '2026-06-27', time: '09:00 AM', team1: 'Egypt', flag1: '🇪🇬', team2: 'Iran', flag2: '🇮🇷', group: 'G' },
+            { id: 66, date: '2026-06-27', time: '09:00 AM', team1: 'New Zealand', flag1: '🇳🇿', team2: 'Belgium', flag2: '🇧🇪', group: 'G' },
+            { id: 67, date: '2026-06-28', time: '03:00 AM', team1: 'Panama', flag1: '🇵🇦', team2: 'England', flag2: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', group: 'L' },
+            { id: 68, date: '2026-06-28', time: '03:00 AM', team1: 'Croatia', flag1: '🇭🇷', team2: 'Ghana', flag2: '🇬🇭', group: 'L' },
+            { id: 69, date: '2026-06-28', time: '05:30 AM', team1: 'Colombia', flag1: '🇨🇴', team2: 'Portugal', flag2: '🇵🇹', group: 'K' },
+            { id: 70, date: '2026-06-28', time: '05:30 AM', team1: 'Congo', flag1: '🇨🇬', team2: 'Uzbekistan', flag2: '🇺🇿', group: 'K' },
+            { id: 71, date: '2026-06-28', time: '08:00 AM', team1: 'Algeria', flag1: '🇩🇿', team2: 'Austria', flag2: '🇦🇹', group: 'J' },
+            { id: 72, date: '2026-06-28', time: '08:00 AM', team1: 'Jordan', flag1: '🇯🇴', team2: 'Argentina', flag2: '🇦🇷', group: 'J' }
         ];
 
         // Dismiss Splash Screen Smoothly
