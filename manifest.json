@@ -1,0 +1,24 @@
+{
+  "name": "MH Live Sports",
+  "short_name": "MH Sports",
+  "description": "রাফি ভাইয়ের খেলার অ্যাপস — লাইভ ফুটবল ও ক্রিকেট বিনামূল্যে দেখুন",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#04060f",
+  "theme_color": "#04060f",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/b26c4adf-b100-44a3-ba44-87af2e2ef552.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/b26c4adf-b100-44a3-ba44-87af2e2ef552.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
