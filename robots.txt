@@ -1,4 +1,61 @@
+# ═══════════════════════════════════════════════
+#   MH Live Sports — robots.txt
+#   Site: https://mh-live-sports.vercel.app/
+#   Developer: MH RAFI
+# ═══════════════════════════════════════════════
+
+# ── সব সার্চ ইঞ্জিন ও AI crawler অনুমতি ──
 User-agent: *
 Allow: /
+Sitemap: https://mh-live-sports.vercel.app/sitemap.xml
 
+# ── Google ──
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-Video
+Allow: /
+
+# ── Bing ──
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# ── AI Crawlers (ChatGPT, Claude, Gemini, Perplexity) ──
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+# ── Social Media Crawlers ──
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+# ── Sitemap Location ──
 Sitemap: https://mh-live-sports.vercel.app/sitemap.xml
