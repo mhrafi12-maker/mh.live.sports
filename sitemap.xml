@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-   <url>
-      <loc>https://mh-live-sports.vercel.app/</loc>
-      <changefreq>always</changefreq>
-      <priority>1.0</priority>
-   </url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+
+  <url>
+    <loc>https://mh-live-sports.vercel.app/</loc>
+    <lastmod>2026-06-28</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+
+    <video:video>
+      <video:thumbnail_loc>https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/b26c4adf-b100-44a3-ba44-87af2e2ef552.png</video:thumbnail_loc>
+      <video:title>MH Live Sports — FIFA World Cup 2026 Live Streaming</video:title>
+      <video:description>T Sports, Toffee ও Fox TV সহ সব চ্যানেলে FIFA World Cup 2026 লাইভ দেখুন MH Live Sports-এ। Ultra HD, সম্পূর্ণ বিনামূল্যে।</video:description>
+      <video:content_loc>https://mh-live-sports.vercel.app/</video:content_loc>
+      <video:player_loc>https://mh-live-sports.vercel.app/</video:player_loc>
+      <video:publication_date>2026-06-01</video:publication_date>
+      <video:live>yes</video:live>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+
+  </url>
+
 </urlset>
