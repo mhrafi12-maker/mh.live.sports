@@ -7,6 +7,7 @@
   "background_color": "#04060f",
   "theme_color": "#04060f",
   "orientation": "any",
+  "scope": "/",
   "icons": [
     {
       "src": "https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/b26c4adf-b100-44a3-ba44-87af2e2ef552.png",
