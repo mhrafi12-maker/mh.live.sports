@@ -347,6 +347,20 @@
         .player-section:hover { box-shadow:0 30px 80px -20px rgba(0,0,0,0.95), 0 0 0 1px rgba(255,31,68,0.45), 0 0 40px rgba(255,31,68,0.08); }
         .video-js { width:100% !important; height:100% !important; background:#000 !important; }
         .video-js .vjs-tech { width:100% !important; height:100% !important; object-fit:contain !important; }
+
+        /* ✅ PWA Standalone mode এ control bar যাতে সবসময় দেখা যায় */
+        .video-js .vjs-control-bar {
+            display:flex !important;
+            visibility:visible !important;
+            opacity:1 !important;
+            background:linear-gradient(0deg,rgba(0,0,0,0.85) 0%,transparent 100%) !important;
+        }
+        .video-js .vjs-volume-panel,
+        .video-js .vjs-progress-control,
+        .video-js .vjs-play-control {
+            display:flex !important;
+            visibility:visible !important;
+        }
         .vjs-big-play-centered .vjs-big-play-button {
             background:linear-gradient(135deg,var(--red),#cc0026) !important;
             border:none !important; border-radius:50% !important;
@@ -451,18 +465,6 @@
         .ticker-item span { color:#fff; font-weight:600; }
         @keyframes tickerMove { 0%{transform:translate3d(0,0,0)} 100%{transform:translate3d(-100%,0,0)} }
 
-        /* ── FORCED FULLSCREEN ── */
-        body.forced-fullscreen { overflow:hidden !important; }
-        body.forced-fullscreen .ott-header,
-        body.forced-fullscreen .channel-details,
-        body.forced-fullscreen .seo-section,
-        body.forced-fullscreen .ticker-wrap,
-        body.forced-fullscreen .player-top-overlay,
-        body.forced-fullscreen .sticky-player-container { display:none !important; }
-        body.forced-fullscreen .main-layout { padding:0 !important; max-width:100vw !important; width:100vw !important; height:100vh !important; justify-content:center; align-items:center; background:#000; }
-        body.forced-fullscreen .player-section { width:100vw !important; max-width:100vw !important; height:auto !important; border-radius:0 !important; border:none !important; }
-        body.forced-fullscreen #fullscreen-controls-holder { display:flex !important; }
-
         /* ── RESPONSIVE ── */
         @media (max-width:768px) {
             .ott-header { padding:14px 16px; }
@@ -526,7 +528,6 @@
                     <button class="server-btn" data-si="2" onclick="changeServer(2)">Fox TV</button>
                     <button class="server-btn" data-si="3" onclick="changeServer(3)">S4</button>
                 </div>
-                <button class="tv-action-btn" onclick="toggleForcedFullscreen()">⛶ Full Screen</button>
             </div>
         </div>
 
@@ -544,19 +545,6 @@
                 </iframe>
             </div>
         </section>
-    </div>
-
-    <!-- Fullscreen controls -->
-    <div id="fullscreen-controls-holder">
-        <div class="server-and-actions" style="background:rgba(8,12,22,0.95);padding:12px 20px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);">
-            <div class="server-controller">
-                <button class="server-btn active-server" data-si="0" onclick="changeServer(0)">Toffee</button>
-                <button class="server-btn" data-si="1" onclick="changeServer(1)">T Sports</button>
-                <button class="server-btn" data-si="2" onclick="changeServer(2)">Fox TV</button>
-                <button class="server-btn" data-si="3" onclick="changeServer(3)">S4</button>
-            </div>
-            <button class="tv-action-btn" style="background:var(--red);" onclick="toggleForcedFullscreen()">✕ Exit Full Screen</button>
-        </div>
     </div>
 
     <!-- Scrollable content -->
@@ -580,7 +568,7 @@
                 </button>
                 <div class="accordion-content">
                     <div class="accordion-body">
-                        <p>পেজ লোড হওয়ার সাথে সাথে <strong>লাইভ স্ট্রিমিং স্বয়ংক্রিয়ভাবে শুরু</strong> হয়ে যাবে। সমস্যা হলে উপরে থাকা <strong>Toffee, T Sports, Fox TV বা S4</strong> সার্ভার বাটন পরিবর্তন করে দেখুন। <strong>Full Screen</strong> বাটনে ক্লিক করলে পুরো স্ক্রিনে খেলা উপভোগ করতে পারবেন। স্ক্রোল করলে প্লেয়ার উপরে আটকে থাকবে।</p>
+                        <p>পেজ লোড হওয়ার সাথে সাথে <strong>লাইভ স্ট্রিমিং স্বয়ংক্রিয়ভাবে শুরু</strong> হয়ে যাবে। সমস্যা হলে উপরে থাকা <strong>Toffee, T Sports, Fox TV বা S4</strong> সার্ভার বাটন পরিবর্তন করে দেখুন। প্লেয়ারের নিচে থাকা ফুলস্ক্রিন আইকনে ক্লিক করলে পুরো স্ক্রিনে খেলা উপভোগ করতে পারবেন। স্ক্রোল করলে প্লেয়ার উপরে আটকে থাকবে।</p>
                     </div>
                 </div>
             </div>
@@ -687,12 +675,19 @@
     // ══════════════════════════════════════════
     // ✅ PLAYER INIT — mobile data optimized
     // ══════════════════════════════════════════
-    window.addEventListener('load', function() {
+    function startPlayer() {
+        if (typeof videojs === 'undefined') {
+            setTimeout(startPlayer, 150); // videojs script load না হওয়া পর্যন্ত retry
+            return;
+        }
 
         // মোবাইল ডেটা detect করো
         var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
         var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
         var isSlowNet = conn && (conn.effectiveType === '2g' || conn.effectiveType === 'slow-2g' || conn.saveData);
+
+        // PWA standalone mode detect করো (Add to Home Screen)
+        var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
         player = videojs('mh-vjs-player', {
             html5: {
@@ -710,9 +705,11 @@
                 }
             },
             muted: true,
-            liveui: true,
+            liveui: false,
             controlBar: {
-                children: ['playToggle','volumePanel','pictureInPictureToggle','progressControl','fullscreenToggle']
+                children: isStandalone
+                    ? ['playToggle','volumePanel','progressControl']  // PWA তে fullscreenToggle বাদ (নিজেই fullscreen)
+                    : ['playToggle','volumePanel','pictureInPictureToggle','progressControl','fullscreenToggle']
             }
         });
 
@@ -747,24 +744,17 @@
             clearTimeout(waitingTimer);
         });
 
-        // auto fallback on error
+        // ❌ Auto-fallback বন্ধ — শুধু error status দেখাবে, user নিজে server switch করবে
         player.on('error', function() {
-            if (isSwitching) return;
-            var next = currentServerIndex + 1;
-            if (next < serverList.length && serverList[next].type === 'hls') {
-                isSwitching = true;
-                updateStatusBar('retrying');
-                setTimeout(function() { changeServer(next); }, 2000);
-            } else {
-                updateStatusBar('error');
-            }
+            updateStatusBar('error');
         });
 
         player.on('playing', function() {
-            isSwitching = false;
             updateStatusBar('live');
         });
-    });
+    }
+
+    startPlayer();
 
     // ══════════════════════════════════════════
     // ✅ changeServer — fifalive এর EXACT sequence
@@ -812,12 +802,6 @@
         tag.textContent = map[state] || map.live;
         tag.style.color = col[state] || col.live;
         tag.style.borderColor = col[state] || col.live;
-    }
-
-    // ── Fullscreen Toggle ──
-    function toggleForcedFullscreen() {
-        document.body.classList.toggle('forced-fullscreen');
-        if (player) setTimeout(function() { player.handleResize(); }, 300);
     }
 
     // ── Accordion ──
