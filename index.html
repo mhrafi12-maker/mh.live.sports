@@ -159,6 +159,10 @@
         }
     </script>
 
+    <!-- ✅ FIREBASE — Admin panel data sync -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
     <!-- ✅ VIDEOJS — defer লোড, fifalive এর মতো -->
     <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet">
     <script defer src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
@@ -488,7 +492,7 @@
 
 <!-- ══════ SPLASH SCREEN ══════ -->
 <div id="splash-screen">
-    <img src="https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/b26c4adf-b100-44a3-ba44-87af2e2ef552.png" alt="MH RAFI Developer" class="splash-avatar">
+    <img src="https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/b26c4adf-b100-44a3-ba44-87af2e2ef552.png" alt="MH RAFI Developer" class="splash-avatar" id="splash-avatar-img">
     <h2 class="splash-title">Welcome to <span>MH Live Sports</span></h2>
     <div class="splash-bar"><div class="splash-progress"></div></div>
 </div>
@@ -500,7 +504,7 @@
         <div class="logo-dot"></div>
         <span class="live-chip">LIVE</span>
     </div>
-    <img src="https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/b26c4adf-b100-44a3-ba44-87af2e2ef552.png" alt="MH RAFI" class="profile-icon">
+    <img src="https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/b26c4adf-b100-44a3-ba44-87af2e2ef552.png" alt="MH RAFI" class="profile-icon" id="secret-admin-trigger" onclick="handleSecretClick()">
 </header>
 
 <!-- ══════ MAIN ══════ -->
@@ -553,8 +557,8 @@
         <!-- Channel Info -->
         <section class="channel-details" aria-label="Channel Information">
             <article class="channel-info">
-                <h1>T Sports Live <span class="live-badge">● LIVE</span></h1>
-                <p>FIFA World Cup 2026 সহ সব ক্রিকেট ও ফুটবল খেলা লাইভ উপভোগ করুন — সম্পূর্ণ বিনামূল্যে।</p>
+                <h1><span id="match-title-text">T Sports Live</span> <span class="live-badge" id="match-live-badge">● LIVE</span></h1>
+                <p id="match-desc-text">FIFA World Cup 2026 সহ সব ক্রিকেট ও ফুটবল খেলা লাইভ উপভোগ করুন — সম্পূর্ণ বিনামূল্যে।</p>
             </article>
             <div class="status-tag" id="stream-status-tag">▶ 1080p Ultra HD</div>
         </section>
@@ -659,7 +663,7 @@
     });
 
     // ══════════════════════════════════════════
-    // ✅ SERVER LIST
+    // ✅ SERVER LIST (fallback — Firebase fail করলে এটাই ব্যবহার হবে)
     // ══════════════════════════════════════════
     var serverList = [
         { name: 'Toffee',   type: 'hls',    url: 'https://prod-cdn01-live.toffeelive.com/live/FIFA-2026/sst/0/master_1750.m3u8?hdntl=Expires=1782840485~_GO=Generated~URLPrefix=aHR0cHM6Ly9wcm9kLWNkbjAxLWxpdmUudG9mZmVlbGl2ZS5jb20~Signature=AeQsclC0uaUD73C5ioeXBuP0KQMiPascuZsxuBTSptw2XJObY_EOhdDMuAf-SEpA-2Gvu0BSh1oStm4smvxA70eui14P' },
@@ -671,6 +675,121 @@
     var currentServerIndex = 0;
     var isSwitching = false;
     var player;
+
+    // ══════════════════════════════════════════
+    // ✅ FIREBASE — Admin panel থেকে live data sync
+    // ══════════════════════════════════════════
+    var firebaseConfig = {
+        apiKey: "AIzaSyD3qAeQO_48Ux6JZqTEzGIDJwsby1sZdOw",
+        authDomain: "mh-live-sports.firebaseapp.com",
+        databaseURL: "https://mh-live-sports-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "mh-live-sports",
+        storageBucket: "mh-live-sports.firebasestorage.app",
+        messagingSenderId: "972591941356",
+        appId: "1:972591941356:web:6143017419bf194323c7c9"
+    };
+
+    try {
+        firebase.initializeApp(firebaseConfig);
+        var fbDb = firebase.database();
+        console.log('✅ Firebase connected, listening for changes...');
+
+        // ── Server list realtime sync ──
+        fbDb.ref('servers').on('value', function (snap) {
+            var data = snap.val();
+            console.log('📡 servers update:', data);
+            if (data && Array.isArray(data) && data.length > 0) {
+                var valid = data.filter(function (s) { return s && s.url; });
+                if (valid.length > 0) {
+                    serverList = valid;
+                    renderServerButtons();
+                }
+            }
+        }, function (err) { console.error('servers sync error:', err); });
+
+        // ── Notice ticker realtime sync ──
+        fbDb.ref('notice').on('value', function (snap) {
+            var d = snap.val();
+            console.log('📢 notice update:', d);
+            if (!d) return;
+            var marquee = document.querySelector('.player-marquee');
+            if (!marquee) return;
+            var lines = [d.line1, d.line2, d.line3].filter(Boolean);
+            if (lines.length === 0) return;
+            marquee.innerHTML = lines.map(function (l) {
+                return '<span class="marquee-item">' + l + '</span>';
+            }).join('');
+        }, function (err) { console.error('notice sync error:', err); });
+
+        // ── Match info realtime sync ──
+        fbDb.ref('matchInfo').on('value', function (snap) {
+            var d = snap.val();
+            console.log('🏆 matchInfo update:', d);
+            if (!d) return;
+            var titleEl = document.getElementById('match-title-text');
+            var descEl  = document.getElementById('match-desc-text');
+            var liveBadge = document.getElementById('match-live-badge');
+            if (titleEl && d.title) titleEl.textContent = d.title;
+            if (descEl && d.description) descEl.textContent = d.description;
+            if (liveBadge) liveBadge.style.display = (d.isLive === false) ? 'none' : 'inline-block';
+        }, function (err) { console.error('matchInfo sync error:', err); });
+
+        // ── Bottom ticker realtime sync ──
+        fbDb.ref('settings/bottomTicker').on('value', function (snap) {
+            var v = snap.val();
+            console.log('📺 bottomTicker update:', v);
+            if (!v) return;
+            var tickerEl = document.querySelector('.ticker');
+            if (tickerEl) {
+                tickerEl.innerHTML = '<div class="ticker-item">' + v + '</div>';
+            }
+        }, function (err) { console.error('bottomTicker sync error:', err); });
+
+        // ── Profile Picture realtime sync (header + splash) ──
+        fbDb.ref('settings/profilePic').on('value', function (snap) {
+            var url = snap.val();
+            console.log('🖼️ profilePic update:', url);
+            if (!url) return;
+            var headerImg = document.getElementById('secret-admin-trigger');
+            var splashImg = document.getElementById('splash-avatar-img');
+            if (headerImg) headerImg.src = url;
+            if (splashImg) splashImg.src = url;
+        }, function (err) { console.error('profilePic sync error:', err); });
+
+    } catch (e) {
+        console.warn('Firebase sync unavailable, using default data:', e.message);
+    }
+
+    // ── Server বাটন গুলো dynamically re-render করো (Firebase data দিয়ে) ──
+    function renderServerButtons() {
+        var normalContainer = document.querySelector('#normal-controls .server-controller');
+        if (!normalContainer) return;
+        normalContainer.innerHTML = '';
+        serverList.forEach(function (s, i) {
+            var btn = document.createElement('button');
+            btn.className = 'server-btn' + (i === 0 ? ' active-server' : '');
+            btn.setAttribute('data-si', i);
+            btn.textContent = s.name;
+            btn.onclick = function () { changeServer(i); };
+            normalContainer.appendChild(btn);
+        });
+    }
+
+    // ══════════════════════════════════════════
+    // ✅ SECRET ADMIN PANEL TRIGGER — ৫ বার ক্লিক করলে খুলবে
+    // ══════════════════════════════════════════
+    var secretClickCount = 0;
+    var secretClickTimer = null;
+    function handleSecretClick() {
+        secretClickCount++;
+        clearTimeout(secretClickTimer);
+        secretClickTimer = setTimeout(function () { secretClickCount = 0; }, 2000);
+
+        if (secretClickCount >= 5) {
+            secretClickCount = 0;
+            window.open('/admin.html', '_blank');
+        }
+    }
 
     // ══════════════════════════════════════════
     // ✅ PLAYER INIT — mobile data optimized
@@ -783,14 +902,98 @@
         } else {
             iframeContainer.style.display = 'none';
             specialFrame.src = '';
-            if (player) {
-                player.error(null);
-                player.pause();
-                player.src({ src: server.url, type: 'application/x-mpegURL' });
-                player.load();
-                player.play().then(function() { isSwitching = false; }).catch(function() { player.muted(true); player.play(); });
-            }
+            switchHlsServer(server.url);
         }
+    }
+
+    // ══════════════════════════════════════════
+    // ✅ HLS Server Switch — player সম্পূর্ণ dispose করে
+    // নতুন <video> element দিয়ে fresh build করে।
+    // এটাই সবচেয়ে reliable, page reload এর মতোই কাজ করে।
+    // ══════════════════════════════════════════
+    function switchHlsServer(url) {
+        var playerContainer = document.querySelector('.player-section');
+        var oldVideoEl = document.getElementById('mh-vjs-player');
+
+        // পুরনো player ধ্বংস করো
+        if (player) {
+            try { player.dispose(); } catch (e) {}
+            player = null;
+        }
+
+        // পুরনো video element থাকলে মুছে নতুন বানাও
+        var existingEl = document.getElementById('mh-vjs-player');
+        if (existingEl) existingEl.remove();
+
+        var newVideo = document.createElement('video');
+        newVideo.id = 'mh-vjs-player';
+        newVideo.className = 'video-js vjs-big-play-centered vjs-default-skin';
+        newVideo.setAttribute('controls', '');
+        newVideo.setAttribute('preload', 'auto');
+        newVideo.setAttribute('autoplay', '');
+        newVideo.setAttribute('muted', '');
+        newVideo.setAttribute('playsinline', '');
+        newVideo.setAttribute('aria-label', 'MH Live Sports Video Player');
+
+        // iframe container এর আগে বসাও (DOM এ ঠিক জায়গায়)
+        var iframeContainer = document.getElementById('mh-iframe-container');
+        playerContainer.insertBefore(newVideo, iframeContainer);
+
+        var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        var isSlowNet = conn && (conn.effectiveType === '2g' || conn.effectiveType === 'slow-2g' || conn.saveData);
+
+        player = videojs('mh-vjs-player', {
+            html5: {
+                vhs: {
+                    overrideNative: true,
+                    allowCrossfileNaming: true,
+                    maxMaxBufferLength: isSlowNet ? 15 : (isMobile ? 30 : 60),
+                    enableLowInitialPlaylist: isMobile || isSlowNet,
+                    smoothQualityChange: true,
+                    useBandwidthFromLocalStorage: true,
+                }
+            },
+            muted: true,
+            liveui: false,
+            controlBar: {
+                children: isStandalone
+                    ? ['playToggle','volumePanel','progressControl']
+                    : ['playToggle','volumePanel','pictureInPictureToggle','progressControl','fullscreenToggle']
+            }
+        });
+
+        player.src({ src: url, type: 'application/x-mpegURL' });
+
+        player.ready(function () {
+            player.muted(true);
+            player.play().catch(function () { player.muted(true); player.play(); });
+        });
+
+        player.on('error', function () { updateStatusBar('error'); });
+        player.on('playing', function () { updateStatusBar('live'); });
+
+        // stalled/waiting recovery আবার লাগাও
+        player.on('stalled', function () {
+            setTimeout(function () {
+                if (player && player.paused()) {
+                    player.load();
+                    player.play().catch(function () {});
+                }
+            }, 4000);
+        });
+        var waitingTimer = null;
+        player.on('waiting', function () {
+            clearTimeout(waitingTimer);
+            waitingTimer = setTimeout(function () {
+                if (player && (player.paused() || player.readyState() < 3)) {
+                    player.load();
+                    player.play().catch(function () {});
+                }
+            }, 8000);
+        });
+        player.on('playing', function () { clearTimeout(waitingTimer); });
     }
 
     // ── Status Bar ──
