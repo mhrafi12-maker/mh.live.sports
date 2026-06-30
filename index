@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>MH Admin Panel</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: #04060f;
+        color: #f1f5f9;
+        min-height: 100vh;
+    }
+
+    /* ── LOGIN SCREEN ── */
+    #login-screen {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    .login-box {
+        background: rgba(11,17,32,0.7);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 18px;
+        padding: 40px 32px;
+        width: 100%;
+        max-width: 380px;
+        backdrop-filter: blur(16px);
+    }
+    .login-box h1 {
+        font-size: 22px;
+        text-align: center;
+        margin-bottom: 8px;
+        color: #fff;
+    }
+    .login-box p {
+        text-align: center;
+        color: #94a3b8;
+        font-size: 13px;
+        margin-bottom: 28px;
+    }
+    .input-group { margin-bottom: 16px; }
+    .input-group label {
+        display: block;
+        font-size: 12px;
+        color: #94a3b8;
+        margin-bottom: 6px;
+        font-weight: 600;
+    }
+    .input-group input {
+        width: 100%;
+        padding: 13px 16px;
+        background: rgba(0,0,0,0.4);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 10px;
+        color: #fff;
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+    .input-group input:focus { border-color: #ff1f44; }
+    .login-btn {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #ff1f44, #cc0026);
+        border: none;
+        border-radius: 10px;
+        color: #fff;
+        font-weight: 700;
+        font-size: 14px;
+        cursor: pointer;
+        margin-top: 8px;
+        transition: opacity 0.2s, transform 0.2s;
+    }
+    .login-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .login-error {
+        color: #ef4444;
+        font-size: 12px;
+        text-align: center;
+        margin-top: 14px;
+        min-height: 16px;
+    }
+
+    /* ── DASHBOARD ── */
+    #dashboard { display: none; }
+    .admin-header {
+        background: rgba(8,12,22,0.95);
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        padding: 16px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+    .admin-header h1 { font-size: 17px; font-weight: 700; }
+    .admin-header h1 span { color: #ff1f44; }
+    .logout-btn {
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: #f1f5f9;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+    .logout-btn:hover { background: rgba(239,68,68,0.15); border-color: #ef4444; }
+
+    .admin-body { max-width: 760px; margin: 0 auto; padding: 24px 18px 60px; }
+
+    .panel {
+        background: rgba(11,17,32,0.6);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 16px;
+        padding: 22px;
+        margin-bottom: 20px;
+    }
+    .panel h2 {
+        font-size: 15px;
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #fff;
+    }
+    .field { margin-bottom: 14px; }
+    .field label {
+        display: block;
+        font-size: 12px;
+        color: #94a3b8;
+        margin-bottom: 6px;
+        font-weight: 600;
+    }
+    .field input, .field textarea {
+        width: 100%;
+        padding: 11px 14px;
+        background: rgba(0,0,0,0.35);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 8px;
+        color: #fff;
+        font-size: 13px;
+        outline: none;
+        font-family: inherit;
+    }
+    .field input:focus, .field textarea:focus { border-color: #10b981; }
+    .field textarea { resize: vertical; min-height: 60px; }
+
+    .server-row {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+        margin-bottom: 14px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .server-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .server-row .field { flex: 1; margin-bottom: 0; }
+    .server-row .name-field { max-width: 110px; }
+
+    .save-btn {
+        background: linear-gradient(135deg, #10b981, #059669);
+        border: none;
+        color: #fff;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 13px;
+        cursor: pointer;
+        margin-top: 6px;
+        transition: opacity 0.2s;
+    }
+    .save-btn:hover { opacity: 0.9; }
+    .save-btn:active { transform: scale(0.98); }
+
+    .toast {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        background: #10b981;
+        color: #fff;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 600;
+        opacity: 0;
+        transition: opacity 0.3s, transform 0.3s;
+        z-index: 1000;
+        pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.error { background: #ef4444; }
+
+    .toggle-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+    }
+    .switch {
+        position: relative;
+        width: 44px;
+        height: 24px;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+        position: absolute; cursor: pointer; inset: 0;
+        background: rgba(255,255,255,0.15);
+        border-radius: 24px;
+        transition: 0.2s;
+    }
+    .slider:before {
+        position: absolute; content: "";
+        height: 18px; width: 18px; left: 3px; bottom: 3px;
+        background: #fff; border-radius: 50%;
+        transition: 0.2s;
+    }
+    .switch input:checked + .slider { background: #10b981; }
+    .switch input:checked + .slider:before { transform: translateX(20px); }
+
+    .loader {
+        display: inline-block;
+        width: 14px; height: 14px;
+        border: 2px solid rgba(255,255,255,0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<!-- ══════ LOGIN SCREEN ══════ -->
+<div id="login-screen">
+    <div class="login-box">
+        <h1>🔐 MH Admin Panel</h1>
+        <p>শুধুমাত্র অনুমোদিত ব্যবহারকারীর জন্য</p>
+
+        <div class="input-group">
+            <label>Email</label>
+            <input type="email" id="login-email" placeholder="admin@example.com" autocomplete="username">
+        </div>
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button class="login-btn" id="login-btn" onclick="doLogin()">লগইন করুন</button>
+        <div class="login-error" id="login-error"></div>
+    </div>
+</div>
+
+<!-- ══════ DASHBOARD ══════ -->
+<div id="dashboard">
+    <header class="admin-header">
+        <h1>MH <span>Admin</span> Panel</h1>
+        <button class="logout-btn" onclick="doLogout()">লগআউট</button>
+    </header>
+
+    <div class="admin-body">
+
+        <!-- Server Management -->
+        <div class="panel">
+            <h2>📡 Server Management</h2>
+            <div id="server-list-container"></div>
+            <button class="save-btn" onclick="saveServers()">সার্ভার সেভ করুন</button>
+        </div>
+
+        <!-- Notice / Ticker -->
+        <div class="panel">
+            <h2>📢 Notice / Ticker Messages</h2>
+            <div class="field">
+                <label>Notice Line ১</label>
+                <textarea id="notice-1" placeholder="🎉 Welcome to MH Live Sports!"></textarea>
+            </div>
+            <div class="field">
+                <label>Notice Line ২</label>
+                <textarea id="notice-2" placeholder="⚠️ সমস্যা হলে অন্য সার্ভার ট্রাই করুন"></textarea>
+            </div>
+            <div class="field">
+                <label>Notice Line ৩</label>
+                <textarea id="notice-3" placeholder="⚽ FIFA World Cup 2026 এখন লাইভ"></textarea>
+            </div>
+            <button class="save-btn" onclick="saveNotice()">নোটিশ সেভ করুন</button>
+        </div>
+
+        <!-- Match Info -->
+        <div class="panel">
+            <h2>🏆 Match Info</h2>
+            <div class="field">
+                <label>শিরোনাম (যেমন: T Sports Live)</label>
+                <input type="text" id="match-title" placeholder="T Sports Live">
+            </div>
+            <div class="field">
+                <label>বিবরণ</label>
+                <textarea id="match-desc" placeholder="FIFA World Cup 2026 সহ সব খেলা..."></textarea>
+            </div>
+            <div class="toggle-row">
+                <span style="font-size:13px;color:#cbd5e1;">লাইভ ব্যাজ দেখাও</span>
+                <label class="switch">
+                    <input type="checkbox" id="match-live" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <button class="save-btn" onclick="saveMatchInfo()" style="margin-top:14px;">ম্যাচ ইনফো সেভ করুন</button>
+        </div>
+
+        <!-- Bottom Ticker -->
+        <div class="panel">
+            <h2>📺 Bottom Ticker</h2>
+            <div class="field">
+                <label>ফুটার টিকার লেখা</label>
+                <textarea id="bottom-ticker" placeholder="⚽ FIFA World Cup 2026 এখন লাইভ MH Live Sports-এ..."></textarea>
+            </div>
+            <button class="save-btn" onclick="saveBottomTicker()">টিকার সেভ করুন</button>
+        </div>
+
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+    // ══════════════════════════════════════════
+    // ✅ FIREBASE CONFIG
+    // ══════════════════════════════════════════
+    const firebaseConfig = {
+        apiKey: "AIzaSyD3qAeQO_48Ux6JZqTEzGIDJwsby1sZdOw",
+        authDomain: "mh-live-sports.firebaseapp.com",
+        projectId: "mh-live-sports",
+        storageBucket: "mh-live-sports.firebasestorage.app",
+        messagingSenderId: "972591941356",
+        appId: "1:972591941356:web:6143017419bf194323c7c9"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    // ── Auth State ──
+    auth.onAuthStateChanged(function(user) {
+        if (user) {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            loadAllData();
+        } else {
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('dashboard').style.display = 'none';
+        }
+    });
+
+    function doLogin() {
+        const email = document.getElementById('login-email').value.trim();
+        const pass  = document.getElementById('login-password').value;
+        const btn   = document.getElementById('login-btn');
+        const errEl = document.getElementById('login-error');
+        errEl.textContent = '';
+
+        if (!email || !pass) {
+            errEl.textContent = 'ইমেইল ও পাসওয়ার্ড দিন';
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<span class="loader"></span> লগইন হচ্ছে...';
+
+        auth.signInWithEmailAndPassword(email, pass)
+            .catch(function(err) {
+                errEl.textContent = 'ভুল ইমেইল বা পাসওয়ার্ড';
+                btn.disabled = false;
+                btn.textContent = 'লগইন করুন';
+            });
+    }
+
+    function doLogout() {
+        auth.signOut();
+    }
+
+    // ── Toast ──
+    function showToast(msg, isError) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.className = 'toast show' + (isError ? ' error' : '');
+        setTimeout(function() { t.className = 'toast'; }, 2500);
+    }
+
+    // ══════════════════════════════════════════
+    // ✅ SERVER MANAGEMENT
+    // ══════════════════════════════════════════
+    function renderServerInputs(servers) {
+        const container = document.getElementById('server-list-container');
+        container.innerHTML = '';
+        servers.forEach(function(s, i) {
+            const row = document.createElement('div');
+            row.className = 'server-row';
+            row.innerHTML =
+                '<div class="field name-field">' +
+                    '<label>নাম</label>' +
+                    '<input type="text" class="srv-name" value="' + (s.name || '') + '">' +
+                '</div>' +
+                '<div class="field">' +
+                    '<label>URL (m3u8 / iframe link)</label>' +
+                    '<input type="text" class="srv-url" value="' + (s.url || '') + '">' +
+                '</div>' +
+                '<div class="field" style="max-width:90px;">' +
+                    '<label>Type</label>' +
+                    '<input type="text" class="srv-type" value="' + (s.type || 'hls') + '" placeholder="hls/iframe">' +
+                '</div>';
+            container.appendChild(row);
+        });
+    }
+
+    function saveServers() {
+        const rows = document.querySelectorAll('.server-row');
+        const servers = [];
+        rows.forEach(function(row) {
+            servers.push({
+                name: row.querySelector('.srv-name').value.trim(),
+                url:  row.querySelector('.srv-url').value.trim(),
+                type: row.querySelector('.srv-type').value.trim() || 'hls'
+            });
+        });
+        db.ref('servers').set(servers)
+            .then(function() { showToast('✅ সার্ভার সেভ হয়েছে'); })
+            .catch(function(e) { showToast('❌ Error: ' + e.message, true); });
+    }
+
+    // ══════════════════════════════════════════
+    // ✅ NOTICE
+    // ══════════════════════════════════════════
+    function saveNotice() {
+        const notice = {
+            line1: document.getElementById('notice-1').value,
+            line2: document.getElementById('notice-2').value,
+            line3: document.getElementById('notice-3').value
+        };
+        db.ref('notice').set(notice)
+            .then(function() { showToast('✅ নোটিশ সেভ হয়েছে'); })
+            .catch(function(e) { showToast('❌ Error: ' + e.message, true); });
+    }
+
+    // ══════════════════════════════════════════
+    // ✅ MATCH INFO
+    // ══════════════════════════════════════════
+    function saveMatchInfo() {
+        const info = {
+            title: document.getElementById('match-title').value,
+            description: document.getElementById('match-desc').value,
+            isLive: document.getElementById('match-live').checked
+        };
+        db.ref('matchInfo').set(info)
+            .then(function() { showToast('✅ ম্যাচ ইনফো সেভ হয়েছে'); })
+            .catch(function(e) { showToast('❌ Error: ' + e.message, true); });
+    }
+
+    // ══════════════════════════════════════════
+    // ✅ BOTTOM TICKER
+    // ══════════════════════════════════════════
+    function saveBottomTicker() {
+        db.ref('settings/bottomTicker').set(document.getElementById('bottom-ticker').value)
+            .then(function() { showToast('✅ টিকার সেভ হয়েছে'); })
+            .catch(function(e) { showToast('❌ Error: ' + e.message, true); });
+    }
+
+    // ══════════════════════════════════════════
+    // ✅ LOAD ALL DATA
+    // ══════════════════════════════════════════
+    function loadAllData() {
+        db.ref('servers').once('value').then(function(snap) {
+            const data = snap.val();
+            if (data) {
+                renderServerInputs(data);
+            } else {
+                renderServerInputs([
+                    { name: 'Toffee', url: '', type: 'hls' },
+                    { name: 'T Sports', url: '', type: 'hls' },
+                    { name: 'Fox TV', url: '', type: 'hls' },
+                    { name: 'S4', url: '', type: 'iframe' }
+                ]);
+            }
+        });
+
+        db.ref('notice').once('value').then(function(snap) {
+            const d = snap.val();
+            if (d) {
+                document.getElementById('notice-1').value = d.line1 || '';
+                document.getElementById('notice-2').value = d.line2 || '';
+                document.getElementById('notice-3').value = d.line3 || '';
+            }
+        });
+
+        db.ref('matchInfo').once('value').then(function(snap) {
+            const d = snap.val();
+            if (d) {
+                document.getElementById('match-title').value = d.title || '';
+                document.getElementById('match-desc').value = d.description || '';
+                document.getElementById('match-live').checked = d.isLive !== false;
+            }
+        });
+
+        db.ref('settings/bottomTicker').once('value').then(function(snap) {
+            const v = snap.val();
+            if (v) document.getElementById('bottom-ticker').value = v;
+        });
+    }
+
+    // Enter key দিয়ে login
+    document.getElementById('login-password').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') doLogin();
+    });
+</script>
+</body>
+</html>
