@@ -327,6 +327,20 @@
             <button class="save-btn" onclick="saveBottomTicker()">টিকার সেভ করুন</button>
         </div>
 
+        <!-- Profile Picture -->
+        <div class="panel">
+            <h2>🖼️ Profile Picture</h2>
+            <div style="display:flex; align-items:center; gap:14px; margin-bottom:14px;">
+                <img id="profile-preview" src="https://i.supaimg.com/5279356f-a8e6-4ce6-b452-1f223bcfb816/b26c4adf-b100-44a3-ba44-87af2e2ef552.png" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,31,68,0.4);">
+                <div style="font-size:12px;color:#94a3b8;">বর্তমান ছবি — হেডার ও স্প্ল্যাশ স্ক্রিনে দেখাবে</div>
+            </div>
+            <div class="field">
+                <label>নতুন ছবির URL (Image hosting link)</label>
+                <input type="text" id="profile-pic-url" placeholder="https://i.supaimg.com/...">
+            </div>
+            <button class="save-btn" onclick="saveProfilePic()">প্রোফাইল ছবি সেভ করুন</button>
+        </div>
+
     </div>
 </div>
 
@@ -339,6 +353,7 @@
     const firebaseConfig = {
         apiKey: "AIzaSyD3qAeQO_48Ux6JZqTEzGIDJwsby1sZdOw",
         authDomain: "mh-live-sports.firebaseapp.com",
+        databaseURL: "https://mh-live-sports-default-rtdb.asia-southeast1.firebasedatabase.app",
         projectId: "mh-live-sports",
         storageBucket: "mh-live-sports.firebasestorage.app",
         messagingSenderId: "972591941356",
@@ -474,6 +489,23 @@
     }
 
     // ══════════════════════════════════════════
+    // ✅ PROFILE PICTURE
+    // ══════════════════════════════════════════
+    function saveProfilePic() {
+        const url = document.getElementById('profile-pic-url').value.trim();
+        if (!url) {
+            showToast('❌ একটা ছবির URL দিন', true);
+            return;
+        }
+        db.ref('settings/profilePic').set(url)
+            .then(function() {
+                showToast('✅ প্রোফাইল ছবি সেভ হয়েছে');
+                document.getElementById('profile-preview').src = url;
+            })
+            .catch(function(e) { showToast('❌ Error: ' + e.message, true); });
+    }
+
+    // ══════════════════════════════════════════
     // ✅ LOAD ALL DATA
     // ══════════════════════════════════════════
     function loadAllData() {
@@ -512,6 +544,14 @@
         db.ref('settings/bottomTicker').once('value').then(function(snap) {
             const v = snap.val();
             if (v) document.getElementById('bottom-ticker').value = v;
+        });
+
+        db.ref('settings/profilePic').once('value').then(function(snap) {
+            const v = snap.val();
+            if (v) {
+                document.getElementById('profile-pic-url').value = v;
+                document.getElementById('profile-preview').src = v;
+            }
         });
     }
 
