@@ -666,7 +666,7 @@
     // ✅ SERVER LIST (fallback — Firebase fail করলে এটাই ব্যবহার হবে)
     // ══════════════════════════════════════════
     var serverList = [
-        { name: 'Toffee',   type: 'hls',    url: 'https://prod-cdn01-live.toffeelive.com/live/FIFA-2026/sst/0/master_1750.m3u8?hdntl=Expires=1782840485~_GO=Generated~URLPrefix=aHR0cHM6Ly9wcm9kLWNkbjAxLWxpdmUudG9mZmVlbGl2ZS5jb20~Signature=AeQsclC0uaUD73C5ioeXBuP0KQMiPascuZsxuBTSptw2XJObY_EOhdDMuAf-SEpA-2Gvu0BSh1oStm4smvxA70eui14P' },
+        { name: 'Toffee',   type: 'hls',    url: 'https://prod-cdn01-live.toffeelive.com/live/FIFA-2026-2/sst/0/master_1500.m3u8?hdntl=Expires=1782938087~_GO=Generated~URLPrefix=aHR0cHM6Ly9wcm9kLWNkbjAxLWxpdmUudG9mZmVlbGl2ZS5jb20~Signature=AeQsclA0d9I3gDbOQYIExgR19jonBf-E03c8Lc5AA4_d19wR3Gp2D7HFXivXafnhuTeXT2GRAmIqrqCTl0VcGWHUmNcJ' },
         { name: 'T Sports', type: 'hls',    url: 'https://trs1.aynaott.com/tsports/index.m3u8' },
         { name: 'Fox TV',   type: 'hls',    url: 'https://1nyaler.streamhostingcdn.top/stream/26/index.m3u8' },
         { name: 'S4',       type: 'iframe', url: 'https://fifalive.click/play' }
@@ -698,12 +698,28 @@
         fbDb.ref('servers').on('value', function (snap) {
             var data = snap.val();
             console.log('📡 servers update:', data);
-            if (data && Array.isArray(data) && data.length > 0) {
-                var valid = data.filter(function (s) { return s && s.url; });
-                if (valid.length > 0) {
-                    serverList = valid;
-                    renderServerButtons();
-                }
+            if (!data) return;
+
+            // object {s0,s1,s2,s3} বা array — দুটোই handle করব
+            var arr;
+            if (Array.isArray(data)) {
+                arr = data;
+            } else {
+                arr = Object.keys(data).sort().map(function(k) { return data[k]; });
+            }
+
+            // URL decode করো (admin panel encode করে সেভ করেছিল)
+            var valid = arr.filter(function(s) { return s && s.url; }).map(function(s) {
+                return {
+                    name: s.name,
+                    type: s.type || 'hls',
+                    url:  decodeURIComponent(s.url)
+                };
+            });
+
+            if (valid.length > 0) {
+                serverList = valid;
+                renderServerButtons();
             }
         }, function (err) { console.error('servers sync error:', err); });
 
@@ -773,6 +789,20 @@
             btn.onclick = function () { changeServer(i); };
             normalContainer.appendChild(btn);
         });
+
+        // ✅ <source src> আপডেট করো — এটাই প্রথম load এর URL
+        var firstServer = serverList[0];
+        if (firstServer && firstServer.type !== 'iframe') {
+            var sourceEl = document.querySelector('#mh-vjs-player source');
+            if (sourceEl) sourceEl.setAttribute('src', firstServer.url);
+            // player already init হলে নতুন URL দিয়ে reload করো
+            if (player && firstServer.url) {
+                player.error(null);
+                player.src({ src: firstServer.url, type: 'application/x-mpegURL' });
+                player.load();
+                player.play().catch(function() { player.muted(true); player.play(); });
+            }
+        }
     }
 
     // ══════════════════════════════════════════
