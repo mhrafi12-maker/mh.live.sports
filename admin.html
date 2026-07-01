@@ -411,7 +411,9 @@
     }
 
     // ══════════════════════════════════════════
-    // ✅ SERVER MANAGEMENT
+    // ✅ SERVER MANAGEMENT — object হিসেবে সেভ
+    // array এর বদলে {s0:{}, s1:{}, s2:{}, s3:{}}
+    // URL encode করে সেভ — ~ character বাগ fix
     // ══════════════════════════════════════════
     function renderServerInputs(servers) {
         const container = document.getElementById('server-list-container');
@@ -419,18 +421,23 @@
         servers.forEach(function(s, i) {
             const row = document.createElement('div');
             row.className = 'server-row';
+            // URL decode করে দেখাও (ছিল encode করা)
+            const displayUrl = s.url ? decodeURIComponent(s.url) : '';
             row.innerHTML =
                 '<div class="field name-field">' +
                     '<label>নাম</label>' +
                     '<input type="text" class="srv-name" value="' + (s.name || '') + '">' +
                 '</div>' +
                 '<div class="field">' +
-                    '<label>URL (m3u8 / iframe link)</label>' +
-                    '<input type="text" class="srv-url" value="' + (s.url || '') + '">' +
+                    '<label>URL (.m3u8 বা iframe link)</label>' +
+                    '<input type="text" class="srv-url" value="' + displayUrl + '" placeholder="https://...">' +
                 '</div>' +
                 '<div class="field" style="max-width:90px;">' +
                     '<label>Type</label>' +
-                    '<input type="text" class="srv-type" value="' + (s.type || 'hls') + '" placeholder="hls/iframe">' +
+                    '<select class="srv-type" style="width:100%;padding:11px 8px;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-size:13px;">' +
+                        '<option value="hls"' + (s.type !== 'iframe' ? ' selected' : '') + '>hls</option>' +
+                        '<option value="iframe"' + (s.type === 'iframe' ? ' selected' : '') + '>iframe</option>' +
+                    '</select>' +
                 '</div>';
             container.appendChild(row);
         });
@@ -438,15 +445,17 @@
 
     function saveServers() {
         const rows = document.querySelectorAll('.server-row');
-        const servers = [];
-        rows.forEach(function(row) {
-            servers.push({
+        // object হিসেবে সেভ — s0, s1, s2, s3
+        const serversObj = {};
+        rows.forEach(function(row, i) {
+            const rawUrl = row.querySelector('.srv-url').value.trim();
+            serversObj['s' + i] = {
                 name: row.querySelector('.srv-name').value.trim(),
-                url:  row.querySelector('.srv-url').value.trim(),
-                type: row.querySelector('.srv-type').value.trim() || 'hls'
-            });
+                url:  encodeURIComponent(rawUrl), // ~ character fix
+                type: row.querySelector('.srv-type').value
+            };
         });
-        db.ref('servers').set(servers)
+        db.ref('servers').set(serversObj)
             .then(function() { showToast('✅ সার্ভার সেভ হয়েছে'); })
             .catch(function(e) { showToast('❌ Error: ' + e.message, true); });
     }
@@ -512,13 +521,20 @@
         db.ref('servers').once('value').then(function(snap) {
             const data = snap.val();
             if (data) {
-                renderServerInputs(data);
+                // object {s0,s1,s2,s3} → array এ convert
+                let arr;
+                if (Array.isArray(data)) {
+                    arr = data; // পুরনো array format support
+                } else {
+                    arr = Object.keys(data).sort().map(function(k) { return data[k]; });
+                }
+                renderServerInputs(arr);
             } else {
                 renderServerInputs([
-                    { name: 'Toffee', url: '', type: 'hls' },
+                    { name: 'Toffee',   url: '', type: 'hls' },
                     { name: 'T Sports', url: '', type: 'hls' },
-                    { name: 'Fox TV', url: '', type: 'hls' },
-                    { name: 'S4', url: '', type: 'iframe' }
+                    { name: 'Fox TV',   url: '', type: 'hls' },
+                    { name: 'S4',       url: '', type: 'iframe' }
                 ]);
             }
         });
